@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/bonhomme-heureux.dir/link.d "CMakeFiles/bonhomme-heureux.dir/src/main.cpp.o" -o bonhomme-heureux  _deps/ftxui-build/libftxui-component.a _deps/ftxui-build/libftxui-dom.a _deps/ftxui-build/libftxui-screen.a
