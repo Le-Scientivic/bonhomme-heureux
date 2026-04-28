@@ -8,6 +8,8 @@
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 
+#include "interface_graphique.hpp"
+
 using namespace ftxui;
 
 // ─── État du joueur ──────────────────────────────────────────────────────────
@@ -331,6 +333,10 @@ void show_ending(const Ending& ending, const State& s) {
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 int main() {
+    init_modules();
+    display_modules();
+
+    /*
     auto scenes  = make_scenes();
     auto screen  = ScreenInteractive::TerminalOutput();
     State state;
@@ -354,7 +360,7 @@ int main() {
         const auto& c = it->second.choices[choice];
         state.apply(c.dh, c.de, c.dp);
         current = c.next_scene;
-    }
+    }*/
 
     return 0;
 }

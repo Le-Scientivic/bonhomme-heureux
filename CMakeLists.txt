@@ -13,7 +13,8 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(ftxui)
 
-add_executable(bonhomme-heureux src/main.cpp)
+add_executable(bonhomme-heureux src/main.cpp src/interface_graphique.hpp src/interface_graphique.cpp src/UI_modules/input.hpp src/UI_modules/input.cpp)
+
 target_link_libraries(bonhomme-heureux
   PRIVATE
     ftxui::component
