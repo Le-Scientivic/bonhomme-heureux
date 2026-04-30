@@ -1,21 +1,18 @@
 #include "interface_graphique.hpp"
 
-#include <ftxui/component/component.hpp>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/dom/elements.hpp>
-
 using namespace ftxui;
 
-std::bitset<MODULE_BIT_COUNT> uiModules;
 
-void init_modules(){
+std::bitset<MODULE_BIT_COUNT> init_modules(){
+    std::bitset<MODULE_BIT_COUNT> uiModules;
     uiModules.set(INPUT);
     uiModules.reset(CHAT);
     uiModules.reset(AUTOMATIONS);
     uiModules.reset(VIDEO);
+    return uiModules;
 }
 
-void display_modules() {
+void display_modules(std::bitset<MODULE_BIT_COUNT> uiModules,) {
     bool isInputEnabled = uiModules.test(INPUT);
 
     // Créer une instance du module input
@@ -36,6 +33,7 @@ void display_modules() {
         }) | border;
     });
 
-    auto screen = ScreenInteractive::TerminalOutput();
-    screen.Loop(main_layout);
+    //affiche les élément ftxui sur le terminal
+    auto affichage = ScreenInteractive::Fullscreen();
+    affichage.Loop(main_layout);
 }

@@ -12,7 +12,7 @@
  *   input.set_placeholder("tapez quelque chose...");
  *   auto component = input.render();
  */
-class InputModule {
+class ModuleDeCommande {
 public:
     /**
      * Constructeur du module input.
@@ -20,14 +20,14 @@ public:
      * @param left_text Texte à afficher à gauche de la zone de saisie
      * @param right_text Texte à afficher à droite de la zone de saisie
      */
-    InputModule(const std::string& left_text = "", const std::string& right_text = "");
+    ModuleDeCommande(const std::string& left_text = "", const std::string& right_text = "");
 
     /**
      * Retourne le composant ftxui rendu pour l'intégration dans l'interface.
      * 
      * @return ftxui::Component composant interactif de saisie
      */
-    ftxui::Component render();
+    ftxui::Component génère_élément_ftxui();
 
     /**
      * Récupère le texte actuellement saisi par l'utilisateur.

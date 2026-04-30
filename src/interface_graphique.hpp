@@ -2,6 +2,10 @@
 
 #include <bitset>
 
+#include <ftxui/component/component.hpp>
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/dom/elements.hpp>
+
 #include "UI_modules/input.hpp"
 
 // modules de l'ui à activer/désactiver
@@ -12,8 +16,11 @@ enum ModuleIndex {
     VIDEO,
     MODULE_BIT_COUNT
 };
-// contient l'état d'activation des modules de l'UI
-extern std::bitset<MODULE_BIT_COUNT> uiModules;
 
-void init_modules();
-void display_modules();
+class Interface_graphique {
+public:
+    Interface_graphique();
+    void use_input(ModuleDeCommande input);
+
+
+};

@@ -5,10 +5,10 @@
 
 using namespace ftxui;
 
-InputModule::InputModule(const std::string& left_text, const std::string& right_text)
+ModuleDeCommande::ModuleDeCommande(const std::string& left_text, const std::string& right_text)
     : left_text_(left_text), right_text_(right_text), input_text_(""), placeholder_("") {}
 
-Component InputModule::render() {
+Component ModuleDeCommande::génère_élément_ftxui() {
     // Créer un composant Input pour capturer la saisie utilisateur
     auto input_comp = Input(&input_text_, placeholder_);
 
@@ -22,26 +22,26 @@ Component InputModule::render() {
     });
 }
 
-std::string& InputModule::get_input() {
+std::string& ModuleDeCommande::get_input() {
     return input_text_;
 }
 
-void InputModule::set_left_text(const std::string& text) {
+void ModuleDeCommande::set_left_text(const std::string& text) {
     left_text_ = text;
 }
 
-void InputModule::set_right_text(const std::string& text) {
+void ModuleDeCommande::set_right_text(const std::string& text) {
     right_text_ = text;
 }
 
-void InputModule::set_placeholder(const std::string& text) {
+void ModuleDeCommande::set_placeholder(const std::string& text) {
     placeholder_ = text;
 }
 
-std::string InputModule::get_left_text() const {
+std::string ModuleDeCommande::get_left_text() const {
     return left_text_;
 }
 
-std::string InputModule::get_right_text() const {
+std::string ModuleDeCommande::get_right_text() const {
     return right_text_;
 }
