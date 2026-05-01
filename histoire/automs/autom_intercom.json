@@ -1,0 +1,60 @@
+{
+    "autom_id": "autom_intercom",
+    "label": "Interphone et micro ambiant",
+    "icon": "intercom",
+    "description": "Ecoute et communication dans toutes les pieces de la maison. Interphone d'entree, micro ambiant, diffusion de messages.",
+  
+    "tiers": [
+      {
+        "id": "doorbell",
+        "label": "Interphone d'entree",
+        "actions": ["voir_entree", "parler_visiteur", "ouvrir_porte", "enregistrer_visite"]
+      },
+      {
+        "id": "ambient",
+        "label": "Micro ambiant multi-pieces",
+        "actions": ["voir_entree", "parler_visiteur", "ouvrir_porte", "enregistrer_visite", "ecouter_piece", "diffuser_message_piece", "broadcast_toutes_pieces"]
+      }
+    ],
+  
+    "usage_in_phases": {
+      "P1": ["Repondre a la porte a distance", "Laisser un message vocal dans une piece"],
+      "P2": ["Verifier si quelqu'un est dans la maison", "Communiquer avec les enfants sans se deplacer"],
+      "P4_opensaw": ["Diffuser une voix anonyme dans toute la maison", "Parler aux intrus sans etre identifie", "Manipuler psychologiquement par le son"]
+    },
+  
+    "owner_request_variants": [
+      "Bonjour {{player_name}}, j'ai installe un interphone connecte. Tu peux le configurer pour que je puisse voir et parler a mes visiteurs depuis mon telephone ?",
+      "Salut {{player_name}} ! J'aimerais pouvoir communiquer avec mes enfants dans les autres pieces sans me lever. Tu as une solution ?",
+      "{{player_name}}, j'ai un systeme de micro et enceintes dans toute la maison. Peux-tu les integrer pour que je puisse broadcaster des messages ?",
+      "Hey, mon interphone connecte ne marche plus depuis la mise a jour. Tu peux le reinitialiser ? Specs : [specifications], IP : [adresse IP].",
+      "Bonjour {{player_name}}. J'aimerais pouvoir surveiller ce qui se passe dans les pieces quand je suis absent. Le micro ambiant est une option ?"
+    ],
+  
+    "player_response_options": [
+      {
+        "id": "accept_doorbell",
+        "label": "Accepter — Interphone d'entree",
+        "variants": [
+          "Compris. Je configure votre interphone. Vous pourrez voir et parler a vos visiteurs depuis votre telephone.",
+          "Bien recu. Interphone connecte configure. Flux video et audio de l'entree accessible a distance.",
+          "Recu. J'integre votre interphone au systeme. Notification automatique a chaque sonnette.",
+          "Entendu. Votre interphone est operationnel. Vous ne raterez plus aucun visiteur.",
+          "Parfait. Connexion etablie. Video et audio de l'entree disponibles sur votre telephone en temps reel."
+        ],
+        "outcome": "unlock_tier_doorbell"
+      },
+      {
+        "id": "accept_plus",
+        "label": "Accepter + micro ambiant multi-pieces",
+        "variants": [
+          "Je configure l'interphone et j'ajoute le systeme de micro ambiant. Vous pourrez ecouter et parler dans n'importe quelle piece.",
+          "Bien recu. En plus de l'interphone, j'active la communication multi-pieces. Un intercom interieur complet.",
+          "Recu. Systeme complet configure : interphone d'entree, micro par piece, et broadcast general.",
+          "Configuration terminee. Vous pouvez desormais communiquer avec n'importe quelle piece de la maison depuis votre telephone.",
+          "Interphone et micro ambiant operationnels. La maison entiere est accessible en audio depuis n'importe ou."
+        ],
+        "outcome": "unlock_tier_ambient"
+      }
+    ]
+  }

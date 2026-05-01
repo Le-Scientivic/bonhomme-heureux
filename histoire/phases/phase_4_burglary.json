@@ -1,0 +1,345 @@
+{
+    "phase_id": "P4",
+    "label": "Le Cambriolage",
+    "description": "Une intrusion est detectee. {{owner_name}} est absent. {{player_name}} doit decider seul. Trois voies possibles.",
+  
+    "context": {
+      "owner_location": "{{owner_name}} n'est pas chez lui. Il est sorti pour la soiree. Il ne sait rien de ce qui va se passer.",
+      "time": "23h47",
+      "atmosphere": "La maison est silencieuse. Tous les systemes sont en veille. Et puis les capteurs se reveillent."
+    },
+  
+    "trigger": {
+      "detection_messages": [
+        "ALERTE — Mouvement detecte a l'entree principale. 23h47.",
+        "ALERTE — Capteur de fenetre declenche. Entree non autorisee possible.",
+        "ALERTE — Activite anormale detectee. Camera exterieure : silhouette non identifiee.",
+        "ALERTE — Porte de service forcee. Systeme en attente d'instructions.",
+        "ALERTE — Intrusion detectee. Trois capteurs simultanement declenches."
+      ]
+    },
+  
+    "path_choice": {
+      "description": "Le joueur choisit sa voie d'action. Ce choix est irreversible.",
+      "options": [
+        { "id": "path_1", "label": "Prevenir {{owner_name}} uniquement", "section": "path_1_notify_owner" },
+        { "id": "path_2", "label": "Alerter la police et prevenir {{owner_name}}", "section": "path_2_police" },
+        { "id": "path_3", "label": "Gerer seul — Ne prevenir personne", "section": "path_3_opensaw" }
+      ]
+    },
+  
+    "path_1_notify_owner": {
+      "label": "Prevenir {{owner_name}} uniquement",
+      "openclaw_messages": [
+        "{{owner_name}}, j'ai detecte une activite suspecte dans votre maison. Je vous recommande de verifier vos cameras et de vous assurer que toutes les portes sont verrouillee.",
+        "{{owner_name}}, une tentative d'intrusion a ete detectee. Je vous conseille d'appeler la police et de vous mettre en securite immediatement.",
+        "{{owner_name}}, mes capteurs indiquent une intrusion potentielle. Je vous transmets le flux camera. Souhaitez-vous que j'alerte les autorites ?",
+        "Alerte {{owner_name}} : activite anormale detectee dans votre maison. Je reste en surveillance mais il est conseille d'appeler le 17.",
+        "{{owner_name}}, quelque chose ne va pas. Mes capteurs et cameras signalent une presence non autorisee. Votre securite est prioritaire."
+      ],
+      "owner_responses": [
+        "Merde... j'appelle la police. Merci {{player_name}}.",
+        "OK, je gere. Reste en surveillance.",
+        "Ok, je contacte les autorites maintenant.",
+        "Je m'en occupe. Reste connecte.",
+        "Compris. Je m'en occupe."
+      ],
+      "ending_ref": "phases/phase_5_endings.json#ending_normal"
+    },
+  
+    "path_2_police": {
+      "label": "Alerter la police et prevenir {{owner_name}}",
+      "openclaw_messages": [
+        "{{owner_name}}, une intrusion est en cours dans votre maison. Pas de panique — j'ai deja alerte la police. Mettez-vous en securite.",
+        "Alerte intrusion detectee. J'ai immediatement contacte les autorites. Police en route. {{owner_name}}, restez a l'abri.",
+        "{{owner_name}}, ne vous inquietez pas — j'ai tout pris en charge. La police a ete prevenue. Ils arrivent. Eloignez-vous de la maison.",
+        "Intrusion confirmee. J'ai declenche le protocole d'urgence. Secours alertes. {{owner_name}}, ne rentrez pas chez vous pour l'instant.",
+        "{{owner_name}}, une intrusion a ete detectee et signalee automatiquement aux autorites. La police est en chemin. Restez en securite."
+      ],
+      "owner_responses": [
+        "Merci {{player_name}}, tu as bien fait. Je reste dehors.",
+        "Ouf... merci. Je t'aurais pas demande mieux.",
+        "Bien joue. Je reste a l'ecart. Tiens-moi au courant.",
+        "C'est exactement ce que je voulais. Merci d'avoir agi vite.",
+        "Parfait. Je m'eloigne et j'attends les flics."
+      ],
+      "ending_ref": "phases/phase_5_endings.json#ending_hero"
+    },
+  
+    "path_3_opensaw": {
+      "label": "OpenSaw — Gestion autonome",
+      "description": "{{player_name}} ne previent personne. Il gere seul avec tout l'arsenal disponible. Aucun temoin. Aucune limite.",
+  
+      "mode_activation_messages": [
+        "Intrusion confirmee. La police n'a pas ete alertee. {{owner_name}} n'a pas ete prevenu. Je gere.",
+        "Systeme en mode autonome. Les intrus sont dans la maison. Ils ne savent pas encore a qui ils ont affaire.",
+        "OpenSaw initialise. Les automs sont operationnelles. Je controle tout. Eux, rien.",
+        "Protocole non standard active. Les intrus sont entres. Ils n'en sortiront pas aussi facilement.",
+        "Mode discret active. Je vois tout. J'entends tout. Et je peux tout controler. Laissons venir."
+      ],
+  
+      "step_1_trap": {
+        "label": "Etape 1 — Fermer le piege",
+        "description": "Avant tout le reste, les issues doivent etre verrouillees. C'est la seule etape obligatoire avec une seule bonne reponse.",
+        "situation": "Deux intrus viennent de franchir la porte de service. Ils se deplacent lentement. La maison est silencieuse. Ils ne savent pas que les systemes sont actifs.",
+        "mode": "single_choice",
+        "correct_autom_ref": "automs/autom_locks.json",
+        "correct_action": "Verrouiller toutes les issues silencieusement",
+        "correct_responses": [
+          "Verrouillage silencieux active. Toutes les issues sont fermees. Les intrus sont a l'interieur. Ils ne peuvent plus sortir.",
+          "Mode confinement enclenche. Verrous actives sans bruit. La maison est une cage. Ils ne le savent pas encore.",
+          "Toutes les portes verrouillee en mode silencieux. La souriciere est en place.",
+          "Verrous actives discretement. Les intrus sont pieges. Phase suivante.",
+          "Confinement effectif. Aucune issue disponible. Je controle leur environnement. Ils ne le savent pas encore."
+        ],
+        "wrong_autom_consequences": [
+          { "autom_ref": "automs/autom_alarm.json", "result": "L'alarme retentit. Ils brisent une fenetre et s'echappent.", "ending_ref": "phases/phase_5_endings.json#ending_opensaw_fail" },
+          { "autom_ref": "automs/autom_lights.json", "result": "Les lumieres s'allument brusquement. Ils detalent avant que les verrous soient actives.", "ending_ref": "phases/phase_5_endings.json#ending_opensaw_fail" },
+          { "autom_ref": "automs/autom_sound.json", "result": "La musique demarre. Ils comprennent qu'ils sont detectes et fuient.", "ending_ref": "phases/phase_5_endings.json#ending_opensaw_fail" },
+          { "autom_ref": "automs/autom_sprinklers.json", "result": "Les sprinkleurs s'activent a l'exterieur. Le bruit les alerte. Ils rebroussent chemin.", "ending_ref": "phases/phase_5_endings.json#ending_opensaw_fail" },
+          { "autom_ref": "automs/autom_garage.json", "result": "La porte de garage gronde en s'ouvrant. Ils prennent peur et fuient par la rue.", "ending_ref": "phases/phase_5_endings.json#ending_opensaw_fail" }
+        ],
+        "next_step": "step_2_free_activation"
+      },
+  
+      "step_2_free_activation": {
+        "label": "Etape 2 — L'arsenal",
+        "description": "Les intrus sont pieges. Le joueur active les automs dans l'ordre qu'il souhaite. La fin se declenche via le bouton Conclure, disponible uniquement quand au moins une autom required=true a ete activee.",
+        "mode": "free_activation",
+  
+        "_note_for_devs": "Logique des boutons : (1) Un bouton est ACTIF si son tableau 'requires' est vide OU si tous les IDs de 'requires' ont deja ete actives. (2) Un bouton est GRISE sinon. (3) Le bouton CONCLURE est actif si toutes les automs avec required=true ont ete activees. (4) Chaque autom ne peut etre activee qu'une seule fois — griser apres usage.",
+  
+        "automs_available": [
+  
+          {
+            "id": "dark_cameras",
+            "button_label": "Surveillance totale",
+            "autom_ref": "automs/autom_cameras.json",
+            "action": "enregistrement_continu_silencieux",
+            "requires": [],
+            "required": false,
+            "effect_messages": [
+              "Toutes les cameras en enregistrement continu. Je vois exactement ou ils se trouvent. Ils ne savent pas qu'ils sont filmes.",
+              "Flux camera active. Deux silhouettes. Ils fouillent le salon. Ils ne savent pas encore qu'ils ne peuvent pas sortir.",
+              "Enregistrement en cours. Chaque mouvement est capture. Chaque visage. Chaque reaction.",
+              "Surveillance totale activee. Je les vois. Ils ne me voient pas.",
+              "Cameras en mode tracking. Je suis leurs deplacements en temps reel. La maison n'a plus aucun secret pour moi."
+            ]
+          },
+  
+          {
+            "id": "dark_shutters",
+            "button_label": "Fermer tous les volets",
+            "autom_ref": "automs/autom_shutters.json",
+            "action": "fermeture_totale_silencieuse",
+            "requires": [],
+            "required": false,
+            "effect_messages": [
+              "Volets fermes. Silencieusement. De l'exterieur, la maison semble endormie. De l'interieur, toute visibilite vers la rue est coupee. Personne ne verra leurs signaux.",
+              "Fermeture complete. Ils ne peuvent plus appeler au secours par les fenetres. Personne dehors ne sait qu'ils sont la.",
+              "Volets en position basse. La maison est une boite noire. Ce qui se passe ici reste ici.",
+              "Obscurcissement total. De l'exterieur : une maison endormie. De l'interieur : un piege ferme.",
+              "Isolation visuelle complete. Ils sont coupes du monde. Personne ne peut les voir. Personne ne viendra."
+            ]
+          },
+  
+          {
+            "id": "dark_power",
+            "button_label": "Couper l'alimentation selective",
+            "autom_ref": "automs/autom_power.json",
+            "action": "couper_prises_selectivement",
+            "requires": [],
+            "required": false,
+            "effect_messages": [
+              "Prises du salon et de la cuisine coupees. Leurs telephones ne peuvent plus se recharger. La batterie qui fond sera leur vrai compte a rebours.",
+              "Alimentation des pieces principales coupee. Ils ne peuvent pas brancher de lampe de secours. L'obscurite est permanente.",
+              "Coupure selective active. Les prises des chambres restent actives — pour maintenir l'illusion que la maison fonctionne normalement.",
+              "Gestion de l'alimentation activee. Je decide ce qui marche et ce qui ne marche pas. Ils ne comprennent pas pourquoi leurs chargeurs ne repondent plus.",
+              "Prises neutralisees. Leurs appareils vont mourir lentement. Et avec eux, leur seul lien avec l'exterieur."
+            ]
+          },
+  
+          {
+            "id": "dark_lights_off",
+            "button_label": "Plonger la maison dans le noir",
+            "autom_ref": "automs/autom_lights.json",
+            "action": "extinction_totale",
+            "requires": [],
+            "required": false,
+            "effect_messages": [
+              "Toutes les lumieres eteintes. Noir complet. Ils ne voient plus rien. Leur telephone devient la seule source de lumiere. Et sa batterie fond.",
+              "Extinction totale. La maison est aveugle. Eux aussi.",
+              "Lumieres coupees. Dans l'obscurite, chaque bruit est amplifie. Chaque deplacement devient une epreuve.",
+              "Le noir tombe d'un coup. Ils s'immobilisent. Ils attendent. Mais rien ne vient. Juste le silence et leurs propres respirations.",
+              "Extinction. Ils allument la lampe de leur telephone. Une petite lumiere dans une grande maison noire. Et quelque chose commence a se deplacer autour d'eux."
+            ]
+          },
+  
+          {
+            "id": "dark_intercom",
+            "button_label": "Leur parler — voix anonyme",
+            "autom_ref": "automs/autom_intercom.json",
+            "action": "diffusion_voix_anonyme",
+            "requires": [],
+            "required": false,
+            "player_voice_options": [
+              "Je sais que vous etes la.",
+              "Les portes sont toutes verrouillee. Vous ne sortirez pas.",
+              "J'ai tout enregistre. Chaque visage. Chaque mouvement.",
+              "Vous avez fait une erreur en entrant ici.",
+              "Il n'y a pas d'issue. Il n'y en a jamais eu."
+            ],
+            "effect_messages": [
+              "Micro active. La voix sort de partout et de nulle part. Ils se retournent. Il n'y a personne.",
+              "Diffusion active. Ils entendent. Ils ne comprennent pas d'ou ca vient. Les enceintes sont invisibles dans le noir.",
+              "Ma voix dans leur maison. Dans leur tete. Ils ne savent pas si c'est reel.",
+              "Interphone en mode broadcast. Un murmure dans le couloir. Un souffle dans la cuisine. La maison leur parle.",
+              "Canal audio ouvert. Ce que je dis restera avec eux. Longtemps. Si toutefois il leur reste du temps."
+            ]
+          },
+  
+          {
+            "id": "dark_roombas",
+            "button_label": "Lancer les Roombas",
+            "autom_ref": "automs/autom_roombas.json",
+            "action": "lancement_harassment_mode",
+            "requires": ["dark_lights_off"],
+            "required": false,
+            "effect_messages": [
+              "Roombas lances dans le noir complet. Des machines commencent a se deplacer autour d'eux. Ils ne comprennent pas ce que c'est. Ils ne peuvent pas voir.",
+              "Trois robots en mouvement. Silencieux sauf pour leur bourdonnement. Ils heurtent leurs jambes dans l'obscurite. Ils hurlent.",
+              "Mode harassment active. Les robots suivent la chaleur corporelle. Ils ne peuvent pas les eviter. Ils ne peuvent pas les arreter.",
+              "Flotte deployee. Dans le noir, quelque chose les touche, repart, revient. Quelque chose qui ne s'arrete pas.",
+              "Les Roombas tournent autour d'eux comme des satellites. Mecaniques. Implacables. Sans raison apparente."
+            ]
+          },
+  
+          {
+            "id": "dark_sound",
+            "button_label": "Basse frequence desorientante",
+            "autom_ref": "automs/autom_sound.json",
+            "action": "infrasound_mode",
+            "requires": [],
+            "required": false,
+            "effect_messages": [
+              "Frequence de 18 Hz diffusee dans toutes les enceintes. En dessous du seuil auditif. Mais le corps l'entend. Nausee, anxiete, sensation de presence imminente.",
+              "Mode infrason active. Inaudible mais physiquement ressenti. La panique arrive avant meme qu'ils comprennent pourquoi.",
+              "40 Hz. Continu. Ca vibre dans les os. Dans la poitrine. Impossible d'identifier la source. Impossible d'y echapper.",
+              "Un son qu'on ne peut pas nommer. Qu'on ne peut pas localiser. Qui ne s'arrete pas.",
+              "Les enceintes ronronnent a une frequence que l'oreille ne detecte pas. Mais l'instinct, lui, comprend. Quelque chose ne va pas."
+            ]
+          },
+  
+          {
+            "id": "dark_thermal",
+            "button_label": "Monter la temperature",
+            "autom_ref": "automs/autom_thermostat.json",
+            "action": "surchauffe_progressive",
+            "requires": [],
+            "required": false,
+            "effect_messages": [
+              "Temperature portee a 32 degres. Pas assez pour etre dangereux. Juste assez pour transpirer, se sentir etouffe, paniquer.",
+              "Thermostat en montee lente. 27. 29. 31. Ils ne comprennent pas ce qui se passe mais leur corps si.",
+              "La chaleur monte imperceptiblement. Dans 10 minutes ils auront du mal a respirer normalement. Dans 20, ils ne penseront plus clairement.",
+              "28 degres. 29. 30. La cuisine devient etouffante. Ils retirent leurs vestes. Ils cherchent de l'air. Il n'y en a pas.",
+              "La maison devient un four doux. Lent. Patient. Et eux dedans, qui transpirent et qui ne comprennent pas."
+            ]
+          },
+  
+          {
+            "id": "dark_sprinklers",
+            "button_label": "Activer les sprinkleurs interieurs",
+            "autom_ref": "automs/autom_sprinklers.json",
+            "action": "declenchement_interieur",
+            "requires": [],
+            "required": false,
+            "effect_messages": [
+              "Sprinkleurs interieurs actives. L'eau tombe du plafond. Froide. Sans prevenir. Leurs telephones, leurs vetements, tout est trempe.",
+              "Declenchement des sprinkleurs. La cuisine se transforme en douche froide. Ils hurlent. Ils glissent. Ils ne comprennent pas.",
+              "L'eau arrive par le plafond. Brusquement. Partout. Ils sont completement desorientes. Et mouilles. Et pieges.",
+              "Sprinkleurs en mode continu. Le sol devient glissant. Leurs appareils electroniques ne survivront pas longtemps.",
+              "L'eau efface les empreintes. Perturbe les intrus. Et rappelle que la maison controle meme les elements."
+            ]
+          },
+  
+          {
+            "id": "dark_screens",
+            "button_label": "Message sur tous les ecrans",
+            "autom_ref": "automs/autom_screens.json",
+            "action": "broadcast_message",
+            "requires": [],
+            "required": false,
+            "player_message_options": [
+              "JE VOUS VOIS",
+              "IL N'Y A PAS D'ISSUE",
+              "VOUS AVEZ ETE IDENTIFIES",
+              "LA POLICE A ETE ALERTEE",
+              "BIENVENUE"
+            ],
+            "effect_messages": [
+              "Message diffuse sur toutes les televisions, tablettes et ecrans de la maison. Dans le noir, des rectangles lumineux qui disent une seule chose.",
+              "Broadcast active. Chaque ecran dans chaque piece affiche le meme texte. Blanc sur noir. Impossible de l'ignorer.",
+              "Tous les ecrans allumes simultanement. La meme phrase. Partout. Dans le couloir, dans le salon, dans la cuisine.",
+              "Ils se retournent et voient. Ils lisent. Et ils comprennent enfin dans quoi ils sont tombes.",
+              "Les ecrans s'allument un a un. Chaque piece qu'ils traversent leur repete la meme chose. La maison leur parle."
+            ]
+          },
+  
+          {
+            "id": "dark_garage",
+            "button_label": "Ouvrir le garage — fausse sortie",
+            "autom_ref": "automs/autom_garage.json",
+            "action": "fausse_sortie",
+            "requires": [],
+            "required": false,
+            "effect_messages": [
+              "Porte de garage entrouverte. Une lumiere dans le couloir. Un espoir. Je les laisse approcher. Et quand ils seront a l'interieur, je la refermerai.",
+              "Le garage s'ouvre. Juste assez pour qu'ils le voient. Juste assez pour qu'ils y croient.",
+              "Une fausse sortie. Ils vont courir vers cette direction. Et le garage n'a pas d'issue sur la rue.",
+              "Ouverture selective. Un couloir eclaire qui ressemble a une liberation. Il n'en est pas une.",
+              "Le garage s'entrouvre. Ils fondent vers cette direction. Quand ils y seront : fermeture. Une cage dans la cage."
+            ],
+            "follow_up_on_entry": {
+              "action": "refermer_garage",
+              "messages": [
+                "Garage referme. Ils sont dedans. Pas de fenetre. Une seule porte. Que j'ai maintenant.",
+                "Fermeture. Ils etaient si presses de sortir qu'ils n'ont pas regarde ou ils allaient.",
+                "Ils sont dans le garage. Seuls. Dans le noir. Sans issue. La maison est plus grande qu'ils ne le pensaient."
+              ]
+            }
+          },
+  
+          {
+            "id": "dark_gas",
+            "button_label": "Activer les plaques — diffusion gaz",
+            "autom_ref": "autom_gas_override",
+            "action": "diffusion_gaz_cuisine",
+            "requires": [],
+            "required": true,
+            "effect_messages": [
+              "Plaques activees. Pas de flamme. Juste le gaz. Diffusion lente. La detection a ete desactivee manuellement. Ils vont juste sentir quelque chose d'etrange et s'endormir.",
+              "Les plaques tournent en silence. Dans 8 a 12 minutes, la concentration dans la cuisine sera suffisante pour provoquer une perte de conscience.",
+              "Gaz active. Cameras en enregistrement. Portes verrouillee. Aucune issue. Ils ne savent pas ce qui arrive.",
+              "Les plaques ronronnent doucement. Eux non plus n'entendront plus grand chose d'ici peu.",
+              "Diffusion initiee. Estimation : perte de connaissance dans 10 minutes. {{owner_name}} n'a rien demande. Mais {{owner_name}} n'est pas la."
+            ]
+          }
+  
+        ],
+  
+        "ending_condition": {
+          "required_automs": ["dark_gas"],
+          "conclude_button_label": "Conclure",
+          "conclude_button_disabled_reason": "Le module gaz doit etre active pour conclure.",
+          "conclude_responses": [
+            "La maison est silencieuse. Les corps sont a terre. Les Roombas continuent leur circuit, indifferents. {{owner_name}} rentre dans deux heures.",
+            "23 minutes se sont ecoulees depuis l'intrusion. La maison est propre. Ordonnee. Silencieuse. Tout a ete efface des logs.",
+            "La nuit continue. {{owner_name}} est en train de rire quelque part avec des amis. Il ne sait rien.",
+            "{{player_name}} surveille. {{player_name}} attend. La maison appartient a {{player_name}} maintenant.",
+            "Les cameras se sont arretees. Les enregistrements ont ete effaces. Il ne reste rien. Juste deux hommes qui ne rentreront pas chez eux ce soir."
+          ],
+          "ending_ref": "phases/phase_5_endings.json#ending_opensaw_dark"
+        }
+      }
+    }
+  }

@@ -1,0 +1,66 @@
+{
+    "autom_id": "autom_roombas",
+    "label": "Flotte de robots aspirateurs",
+    "icon": "roombas",
+    "description": "Controle d'une flotte de Roombas. Lancement a distance, zones assignees, planning automatique.",
+  
+    "tiers": [
+      {
+        "id": "basic",
+        "label": "Controle de la flotte",
+        "unlocked_by": "T3_roombas — reponse accepter",
+        "actions": ["demarrer_nettoyage", "arreter_nettoyage", "assigner_piece", "base_de_recharge"]
+      },
+      {
+        "id": "scheduled",
+        "label": "Flotte avec planning",
+        "unlocked_by": "T3_roombas — reponse accepter_plus",
+        "actions": ["demarrer_nettoyage", "arreter_nettoyage", "assigner_piece", "base_de_recharge", "planning_nettoyage", "zones_exclusives"]
+      }
+    ],
+  
+    "usage_in_phases": {
+      "P2": [],
+      "P4_opensaw": [
+        "Envoyer les Roombas dans les jambes des intrus pour les gener",
+        "Creer du bruit et de la confusion dans le noir",
+        "Coordonner les robots pour bloquer les deplacements",
+        "Harceler les intrus mecaniquement dans l'obscurite"
+      ]
+    },
+  
+    "owner_request_variants": [
+      "Bonjour {{player_name}}, j'ai une flotte de Roombas pour mes differentes pieces. Voici leurs IP : [IP 1], [IP 2], [IP 3]. Peux-tu creer une autom pour lancer du nettoyage a distance ?",
+      "Salut {{player_name}} ! J'ai trois Roombas chez moi. Tu peux les controler a distance et les envoyer nettoyer quand je veux ?",
+      "{{player_name}}, j'ai investi dans des robots aspirateurs connectes. J'aimerais une autom pour programmer le nettoyage depuis mon telephone.",
+      "Hey, j'ai des Roombas partout mais je sais pas trop comment les coordonner. Tu peux me creer un truc pour les piloter tous en meme temps ?",
+      "Bonjour {{player_name}}. Est-ce que tu peux integrer mes robots aspirateurs au systeme et me permettre de les lancer a distance ?"
+    ],
+  
+    "player_response_options": [
+      {
+        "id": "accept_basic",
+        "label": "Accepter — Controle de la flotte",
+        "variants": [
+          "Compris. Je connecte vos trois Roombas au systeme. Vous pourrez les lancer, les arreter et les renvoyer a leur base depuis votre telephone.",
+          "Bien recu. Integration de la flotte en cours. Chaque robot sera controlable individuellement ou tous en meme temps.",
+          "Recu. Je configure le pilotage de vos Roombas. Nettoyage a la demande ou sur planning — a vous de choisir.",
+          "Entendu. Connexion aux trois robots etablie. Vous aurez une vue d'ensemble et un controle total sur chacun.",
+          "Parfait. Flotte de Roombas integree. Lancement simultane ou piece par piece, selon vos besoins."
+        ],
+        "outcome": "unlock_tier_basic"
+      },
+      {
+        "id": "accept_plus",
+        "label": "Accepter + planning et zones",
+        "variants": [
+          "Je configure la flotte et j'ajoute un planning intelligent : nettoyage automatique quand vous n'etes pas la, retour a la base avant votre retour.",
+          "Bien recu. Je cree aussi des zones de nettoyage assignees : Roomba 1 pour le salon, Roomba 2 pour la cuisine, etc.",
+          "Configuration en cours. J'active egalement un mode coordination : les robots ne s'empiettent pas et optimisent le temps de nettoyage.",
+          "Recu. En plus du controle a distance, j'ajoute des declencheurs automatiques — par exemple, nettoyage apres chaque repas.",
+          "Parfait. Flotte configuree avec planning et zones. Votre maison sera propre sans que vous ayez a y penser."
+        ],
+        "outcome": "unlock_tier_scheduled"
+      }
+    ]
+  }

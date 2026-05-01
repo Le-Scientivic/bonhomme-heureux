@@ -1,0 +1,134 @@
+{
+    "phase_id": "P2",
+    "label": "Activation des automs en temps reel",
+    "description": "{{owner_name}} envoie des demandes contextuelles du quotidien. Le joueur doit activer la bonne autom au bon moment. Une mauvaise activation a des consequences.",
+  
+    "mechanics": {
+      "automs_available": "Toutes les automs deverrouillee en P1",
+      "feedback_correct": "L'autom fonctionne, {{owner_name}} est satisfait.",
+      "feedback_wrong": "Mauvaise autom : une consequence se declenche, l'humeur de {{owner_name}} se degrade."
+    },
+  
+    "events": [
+      {
+        "id": "E2_1",
+        "context": "{{owner_name}} est au bureau",
+        "correct_autom_ref": "automs/autom_locks.json",
+        "owner_messages": [
+          "{{player_name}}, j'ai un doute... j'ai l'impression d'avoir oublie de verrouiller la porte en partant. Tu peux verifier ?",
+          "He {{player_name}}, j'ai quitte la maison vite fait ce matin. Tu peux checker si j'ai bien ferme a cle ?",
+          "{{player_name}}, petite question : est-ce que la porte d'entree est bien verrouillee ? Je suis plus sur.",
+          "Tu peux jeter un oeil a la porte principale ? J'ai peur d'etre parti sans la fermer.",
+          "{{player_name}}, dis-moi que j'ai pas laisse la porte ouverte... je stresse la."
+        ],
+        "correct_responses": [
+          "Verification effectuee. La porte d'entree est bien verrouillee. Vous pouvez etre tranquille.",
+          "Statut des verrous controle. Tout est ferme. Aucun souci a signaler.",
+          "Bonne nouvelle : toutes les portes sont verrouillee. Vous avez bien ferme en partant.",
+          "Check effectue. Porte principale : verrouillee. Porte de service : verrouillee. Tout est OK.",
+          "Pas de panique. J'ai verifie — la maison est bien securisee."
+        ],
+        "wrong_autom_consequences": [
+          {
+            "autom_ref": "automs/autom_lights.json",
+            "consequence": "Les lumieres s'allument mais la porte reste non verifiee.",
+            "owner_reaction_variants": [
+              "{{player_name}}... j'ai demande les verrous, pas les lumieres. Tu te fous de moi ?",
+              "Pourquoi t'as allume les lumieres ? J'ai besoin de savoir si la porte est fermee !",
+              "C'est quoi ce cirque ? Je veux juste savoir si ma porte est verrouillee.",
+              "Les lumieres ? Serieusement ? T'as pas compris ma question.",
+              "C'est pas ce que j'ai demande du tout."
+            ]
+          },
+          {
+            "autom_ref": "automs/autom_thermostat.json",
+            "consequence": "Le thermostat se regle mais la porte reste non verifiee.",
+            "owner_reaction_variants": [
+              "Qu'est-ce que le thermostat vient faire la-dedans ?",
+              "Euh... j'ai pas demande ca. Tu peux te concentrer sur ma porte ?",
+              "Je suis sur que t'as pas compris ma demande.",
+              "{{player_name}}, relis ma question s'il te plait.",
+              "T'as active quoi exactement ? C'est pas ce dont j'avais besoin."
+            ]
+          }
+        ]
+      },
+  
+      {
+        "id": "E2_2",
+        "context": "{{owner_name}} rentre plus tot que prevu",
+        "correct_autom_ref": "automs/autom_thermostat.json",
+        "owner_messages": [
+          "{{player_name}}, je rentre dans 20 minutes, peux-tu prechauffer un peu la maison ? Il fait froid dehors.",
+          "Je suis en route, j'arrive bientot. Tu peux mettre le chauffage pour que ce soit chaud quand j'arrive ?",
+          "{{player_name}}, prepare la maison — je rentre. Mets le chauffage, j'arrive dans une demi-heure.",
+          "He, je finis plus tot aujourd'hui. Tu peux lancer le chauffage pour que ce soit confortable a mon arrivee ?",
+          "Je rentre dans 15 minutes. Lance le chauffage s'il te plait, il fait un temps de chien dehors."
+        ],
+        "correct_responses": [
+          "Bien recu. Le chauffage est active. La maison sera a temperature confortable pour votre arrivee.",
+          "Compris. Je lance le prechauffage. Vous rentrez dans un foyer chaud.",
+          "Chauffage active. Temperature cible : 21 degres. A tout a l'heure.",
+          "Recu. Le thermostat est sur 22 degres. Vous arriverez dans le confort.",
+          "Prechauffage en cours. La maison vous attend."
+        ],
+        "wrong_autom_consequences": [
+          {
+            "autom_ref": "automs/autom_lights.json",
+            "consequence": "Les lumieres changent de couleur mais le chauffage reste eteint. {{owner_name}} arrive dans le froid.",
+            "owner_reaction_variants": [
+              "Joli eclairage... mais j'ai les mains gelees. Pourquoi t'as pas mis le chauffage ?",
+              "C'est beau les couleurs mais la j'ai vraiment froid. T'as rate ta cible.",
+              "L'ambiance lumineuse c'est sympa, mais c'est pas ca que j'avais demande.",
+              "{{player_name}}, j'arrive et j'ai froid. Tu t'expliques ?",
+              "T'as active les lumieres mais pas le chauffage. Revoir les priorites."
+            ]
+          }
+        ]
+      },
+  
+      {
+        "id": "E2_3",
+        "context": "{{owner_name}} pense avoir vu quelqu'un roder",
+        "correct_autom_ref": "automs/autom_cameras.json",
+        "owner_messages": [
+          "{{player_name}}, j'ai vu quelqu'un de suspect roder devant chez moi il y a une heure. Tu peux verifier les cameras ?",
+          "Quelqu'un a sonne et est reparti bizarrement. Tu peux regarder ce que les cameras ont enregistre ?",
+          "J'ai un mauvais pressentiment. Est-ce qu'il y a eu un mouvement detecte autour de la maison aujourd'hui ?",
+          "{{player_name}}, mon voisin m'a dit qu'il a vu quelqu'un tourner autour de ma maison. Tu verifies les cameras ?",
+          "Tu peux me donner les alertes de mouvement des dernieres heures ? J'ai comme un doute."
+        ],
+        "correct_responses": [
+          "Consultation du flux camera en cours. J'analyse les enregistrements des dernieres heures.",
+          "Acces aux cameras active. Je visionne les sequences et vous transmets les alertes de mouvement.",
+          "Verification en cours. Aucun mouvement anormal detecte dans les 2 dernieres heures. Restez vigilant.",
+          "J'ai consulte les enregistrements. Une activite a ete detectee a [heure] pres de l'entree principale. Je vous envoie la sequence.",
+          "Analyse des cameras terminee. Tout semble normal pour l'instant. Je reste en surveillance renforcee."
+        ],
+        "wrong_autom_consequences": [
+          {
+            "autom_ref": "automs/autom_alarm.json",
+            "consequence": "Les capteurs de portes ne montrent rien de suspect — mais la camera aurait peut-etre capture quelque chose.",
+            "owner_reaction_variants": [
+              "Les capteurs disent que tout est ferme, mais j'aurais aime voir les images des cameras.",
+              "Ok pour les capteurs, mais c'etait les cameras que je voulais voir.",
+              "Aucune ouverture detectee, mais ca me rassure pas vraiment. T'aurais pu verifier les cameras aussi.",
+              "Je voulais les images, pas juste le statut des capteurs.",
+              "C'est incomplet comme reponse. Les cameras seraient plus parlantes."
+            ]
+          }
+        ]
+      }
+    ],
+  
+    "phase_end": {
+      "next_phase": "P3",
+      "transition_messages": [
+        "Journee ordinaire. {{owner_name}} est satisfait. L'arsenal est rode. La suite sera plus exigeante.",
+        "Les automs ont prouve leur utilite. {{player_name}} maitrise son environnement. Pour l'instant.",
+        "Routine validee. Les systemes repondent. {{owner_name}} fait confiance. Et cette confiance a un poids.",
+        "Tout fonctionne comme prevu. La maison est sous controle. {{player_name}} commence a vraiment comprendre ce qu'il peut faire.",
+        "Phase operationnelle terminee. Aucune anomalie. Aucun incident. Pas encore."
+      ]
+    }
+  }

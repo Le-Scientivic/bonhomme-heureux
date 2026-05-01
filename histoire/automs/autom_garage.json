@@ -1,0 +1,60 @@
+{
+    "autom_id": "autom_garage",
+    "label": "Garage connecte",
+    "icon": "garage",
+    "description": "Controle de la porte de garage a distance. Historique d'ouvertures, acces temporaire pour visiteurs.",
+  
+    "tiers": [
+      {
+        "id": "basic",
+        "label": "Controle basique",
+        "actions": ["ouvrir_garage", "fermer_garage", "statut_garage"]
+      },
+      {
+        "id": "access",
+        "label": "Gestion des acces",
+        "actions": ["ouvrir_garage", "fermer_garage", "statut_garage", "acces_temporaire", "historique_ouvertures", "notification_ouverture"]
+      }
+    ],
+  
+    "usage_in_phases": {
+      "P1": ["Ouvrir le garage a distance pour un livreur", "Verifier si le garage est ferme"],
+      "P2": ["Ouvrir pour {{owner_name}} qui rentre", "Verifier le statut avant de partir"],
+      "P4_opensaw": ["Simuler une fausse sortie en entrouvrant le garage", "Pieger les intrus a l'interieur en refermant apres leur entree"]
+    },
+  
+    "owner_request_variants": [
+      "Bonjour {{player_name}}, j'ai changé les verrous des portes de chez moi par des verrous connectes. Tu peux faire en sorte que je puisse verrouiller et deverrouiller a distance ?",
+      "Salut {{player_name}} ! J'ai installe une porte de garage connectee. Tu peux la configurer pour que je l'ouvre depuis ma voiture ?",
+      "{{player_name}}, ma porte de garage est connectee mais je sais pas comment l'integrer. Specs : [specifications], IP : [adresse IP].",
+      "Hey, j'aimerais donner un acces temporaire a mon jardinier pour entrer par le garage quand je suis absent. Tu peux configurer ca ?",
+      "Bonjour {{player_name}}. J'ai oublie de fermer le garage en partant. Tu peux le fermer a distance et m'envoyer une alerte la prochaine fois ?"
+    ],
+  
+    "player_response_options": [
+      {
+        "id": "accept_basic",
+        "label": "Accepter — Controle basique",
+        "variants": [
+          "Compris. Je connecte votre porte de garage. Ouverture et fermeture a distance disponibles.",
+          "Bien recu. Configuration du garage connecte en cours. Controle depuis votre telephone operationnel.",
+          "Recu. J'integre votre garage au reseau domotique. Plus jamais a vous demander si vous avez ferme.",
+          "Entendu. Votre garage est connecte. Statut et controle a distance actifs.",
+          "Parfait. Connexion etablie. Votre garage repond maintenant a vos commandes a distance."
+        ],
+        "outcome": "unlock_tier_basic"
+      },
+      {
+        "id": "accept_plus",
+        "label": "Accepter + gestion des acces",
+        "variants": [
+          "Je configure le controle a distance et j'ajoute la gestion des acces : codes temporaires, historique, notifications.",
+          "Bien recu. En plus du controle manuel, j'active les acces temporaires et un historique complet des ouvertures.",
+          "Recu. Systeme complet configure : controle, acces temporaires et alerte si le garage reste ouvert trop longtemps.",
+          "Configuration terminee. Vous pouvez creer des acces temporaires pour vos visiteurs et voir qui a ouvert et quand.",
+          "Garage connecte avec gestion avancee. Vous recevrez une notification si le garage est ouvert alors que vous etes absent."
+        ],
+        "outcome": "unlock_tier_access"
+      }
+    ]
+  }

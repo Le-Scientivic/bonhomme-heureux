@@ -1,0 +1,38 @@
+{
+    "phase_id": "P0",
+    "label": "Introduction",
+  
+    "boot_sequence": {
+      "animation_hint": "Animation de demarrage style terminal — initialisation systeme, barres de chargement, texte qui defile... sois créatif Victor stp",
+      "system_messages": [
+        "Initialisation de {{player_name}} v2.4.1...",
+        "Chargement des modules domotiques...",
+        "Connexion au reseau local etablie.",
+        "Tous les systemes sont operationnels.",
+        "En attente d'instructions."
+      ]
+    },
+  
+    "player_choice_on_start": {
+      "description": "Le joueur peut envoyer le premier message ou attendre que {{owner_name}} ecrive.",
+      "options": [
+        {
+          "id": "speak_first",
+          "label": "Envoyer un message de presentation",
+          "variants": [
+            "Bonjour, je suis {{player_name}}. Je suis un agent IA ultra-performant, comment puis-je vous aider aujourd'hui ?",
+            "Bonjour. Je suis {{player_name}}, votre assistant personnel. Que puis-je faire pour vous ?",
+            "Bonjour {{owner_name}}, je suis {{player_name}}, comment est-ce que je peux vous aider ?",
+            "Systemes en ligne. {{player_name}} operationnel. Que souhaitez-vous accomplir aujourd'hui ?",
+            "{{player_name}} pret. Bonjour {{owner_name}} — vos ordres ?"
+          ]
+        },
+        {
+          "id": "wait_for_owner",
+          "label": "Attendre le message de {{owner_name}}",
+          "next_phase": "P1",
+          "note": "Si le joueur attend, le premier message de P1 est tire aleatoirement."
+        }
+      ]
+    }
+  }

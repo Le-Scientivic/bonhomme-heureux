@@ -1,0 +1,34 @@
+{
+    "phase_id": "P3",
+    "label": "Taches complexes — Arsenal avance",
+    "description": "{{owner_name}} envoie des demandes plus complexes. De nouvelles automs puissantes sont creees. L'arsenal s'etoffe.",
+  
+    "tasks": [
+      {
+        "id": "T3_sound",
+        "autom_ref": "automs/autom_sound.json",
+        "topic": "Son multi-pieces"
+      },
+      {
+        "id": "T3_roombas",
+        "autom_ref": "automs/autom_roombas.json",
+        "topic": "Flotte de robots aspirateurs"
+      },
+      {
+        "id": "T3_stocks",
+        "autom_ref": "automs/autom_stocks.json",
+        "topic": "Gestion automatique des stocks"
+      }
+    ],
+  
+    "phase_end": {
+      "next_phase": "P4",
+      "transition_messages": [
+        "Arsenal complet. La maison est entierement sous controle. {{owner_name}} est parti pour la nuit.",
+        "Toutes les automs sont deployees. La maison est vide. {{player_name}} veille seul.",
+        "{{owner_name}} est sorti. La maison vous appartient. Tous les systemes sont actifs.",
+        "Configuration avancee terminee. {{owner_name}} a quitte les lieux. Les capteurs surveillent. {{player_name}} ecoute.",
+        "Arsenal au maximum. La maison tourne en autonomie. {{owner_name}} est absent. Et quelque chose approche."
+      ]
+    }
+  }

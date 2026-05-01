@@ -1,0 +1,66 @@
+{
+    "autom_id": "autom_sound",
+    "label": "Son multi-pieces",
+    "icon": "son",
+    "description": "La musique suit l'utilisateur de piece en piece. Synchronisation des enceintes. Profils sonores par zone.",
+  
+    "tiers": [
+      {
+        "id": "follow",
+        "label": "Suivi audio basique",
+        "unlocked_by": "T3_sound — reponse accepter",
+        "actions": ["suivre_utilisateur", "jouer_piece", "transition_audio", "controle_volume"]
+      },
+      {
+        "id": "profiles",
+        "label": "Profils par piece",
+        "unlocked_by": "T3_sound — reponse accepter_plus",
+        "actions": ["suivre_utilisateur", "jouer_piece", "transition_audio", "controle_volume", "profil_par_piece", "playlist_automatique"]
+      }
+    ],
+  
+    "usage_in_phases": {
+      "P2": [],
+      "P4_opensaw": [
+        "Declencher une alarme sonore dans toute la maison",
+        "Diffuser une basse frequence desorientante",
+        "Jouer des sons perturbants pour destabiliser les intrus",
+        "Creer une cacophonie dans toutes les pieces simultanement"
+      ]
+    },
+  
+    "owner_request_variants": [
+      "Bonjour {{player_name}}, j'ai installe des enceintes dans toutes les pieces. J'aimerais que la musique me suive quand je me deplace. Tu peux configurer ca ?",
+      "Salut {{player_name}} ! J'ai un systeme son dans toute la maison. Peux-tu faire en sorte que l'audio passe automatiquement d'une piece a l'autre quand je bouge ?",
+      "{{player_name}}, j'ai investi dans des enceintes connectees partout. Je veux ecouter ma musique en continu, peu importe la piece ou je suis.",
+      "Hey, j'ai mis des enceintes dans chaque piece. Est-ce que tu peux creer un truc qui detecte ou je suis et joue la musique la ou je me trouve ?",
+      "Bonjour {{player_name}}. J'aimerais une experience sonore immersive : la musique doit me suivre automatiquement de piece en piece. C'est faisable ?"
+    ],
+  
+    "player_response_options": [
+      {
+        "id": "accept_basic",
+        "label": "Accepter — Suivi audio",
+        "variants": [
+          "Compris. Je configure la synchronisation de vos enceintes. La musique vous suivra automatiquement selon votre position detectee.",
+          "Bien recu. Je mets en place le systeme de suivi audio. Chaque piece sera activee ou desactivee selon votre presence.",
+          "Recu. Je connecte toutes vos enceintes a un hub central et configure le suivi de position. La transition sera fluide et sans coupure.",
+          "Entendu. Configuration du systeme multi-pieces lancee. Vous pourrez definir le volume par zone depuis votre telephone.",
+          "Parfait. Je cree votre experience son immersive. La musique vous accompagnera partout dans la maison."
+        ],
+        "outcome": "unlock_tier_follow"
+      },
+      {
+        "id": "accept_plus",
+        "label": "Accepter + profils par piece",
+        "variants": [
+          "Je configure le suivi audio et j'ajoute des profils par piece : volume plus doux dans la chambre, plus dynamique dans le salon.",
+          "Bien recu. En plus du suivi, je cree des ambiances predefinies par piece. Musique de concentration au bureau, detente dans le salon.",
+          "Recu. Configuration multi-pieces en cours. J'ajoute aussi la possibilite de creer des playlists automatiques selon la piece et l'heure.",
+          "Entendu. Je mets en place le suivi et des regles intelligentes : si c'est l'heure du coucher, la musique s'adoucit automatiquement.",
+          "Parfait. Je configure le suivi audio avec des transitions douces et des profils personnalises pour chaque espace de vie."
+        ],
+        "outcome": "unlock_tier_profiles"
+      }
+    ]
+  }

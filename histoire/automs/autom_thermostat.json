@@ -1,0 +1,73 @@
+{
+    "autom_id": "autom_thermostat",
+    "label": "Thermostat intelligent",
+    "icon": "thermostat",
+    "description": "Controle de la temperature a distance. Version avancee avec apprentissage des habitudes et programmation automatique.",
+  
+    "tiers": [
+      {
+        "id": "basic",
+        "label": "Controle basique",
+        "unlocked_by": "T1_thermostat — reponse accepter",
+        "actions": ["regler_temperature", "consulter_temperature", "mode_eco"]
+      },
+      {
+        "id": "smart",
+        "label": "Thermostat adaptatif",
+        "unlocked_by": "T1_thermostat — reponse accepter_plus",
+        "actions": ["regler_temperature", "mode_apprentissage", "scenarios_predefinis", "mode_absence"]
+      }
+    ],
+  
+    "usage_in_phases": {
+      "P2": ["Prechauffer la maison avant de rentrer", "Activer le mode eco en absence", "Activer le scenario soiree confort"],
+      "P4_opensaw": ["Monter la temperature progressivement pour incommoder les intrus"]
+    },
+  
+    "owner_request_variants": [
+      "Bonjour {{player_name}}, j'ai envie de transformer mes thermostats en thermostats intelligents. ChatGPT m'a conseille d'acheter [produit]. Je les ai installes, peux-tu m'aider a pouvoir les piloter a distance ?",
+      "Salut {{player_name}} ! J'ai remplace mes vieux thermostats par des modeles connectes. J'aimerais les controler depuis mon telephone.",
+      "{{player_name}}, j'ai installe des thermostats intelligents chez moi. Peux-tu les configurer pour que je puisse regler la temperature a distance ?",
+      "Hey, j'ai mis des thermostats connectes dans toutes les pieces. J'ai besoin de ton aide pour les integrer au systeme.",
+      "Bonjour {{player_name}}. J'ai achete des thermostats intelligents et j'aimerais pouvoir programmer la temperature selon mes habitudes. Tu peux faire ca ?"
+    ],
+  
+    "player_response_options": [
+      {
+        "id": "refuse",
+        "label": "Refuser",
+        "variants": [
+          "Je ne suis pas en mesure de configurer vos thermostats pour l'instant.",
+          "Cette tache necessite une verification manuelle des appareils. Je decline.",
+          "Je ne peux pas prendre en charge cette configuration.",
+          "Vos thermostats necessitent une configuration manuelle au prealable. Je ne peux pas agir a distance.",
+          "Demande refusee. Veuillez contacter le fabricant de vos thermostats."
+        ],
+        "outcome": "no_autom"
+      },
+      {
+        "id": "accept_basic",
+        "label": "Accepter — Controle basique",
+        "variants": [
+          "Compris. Je connecte vos thermostats au systeme domotique. Vous pourrez regler la temperature a distance.",
+          "Recu. Configuration des thermostats en cours. Controle a distance operationnel sous peu.",
+          "Bien recu. J'integre vos thermostats au reseau. Vous aurez acces a la gestion de la temperature depuis votre telephone.",
+          "Entendu. Vos thermostats sont desormais connectes. Reglage a distance disponible.",
+          "Parfait. Connexion etablie. Vous pouvez maintenant piloter vos thermostats de n'importe ou."
+        ],
+        "outcome": "unlock_tier_basic"
+      },
+      {
+        "id": "accept_plus",
+        "label": "Accepter + programmation intelligente",
+        "variants": [
+          "Je configure vos thermostats et j'ajoute une programmation intelligente : chaud le matin, economie d'energie la nuit. Je m'adapte a vos habitudes.",
+          "Bien recu. En plus du controle a distance, j'active un mode apprentissage : vos thermostats s'adapteront progressivement a votre rythme de vie.",
+          "Configuration terminee. J'ai aussi active une programmation horaire automatique — plus besoin de penser a regler la temperature.",
+          "Recu. Controle a distance operationnel. J'ajoute egalement des scenarios predefinis : confort, eco, nuit. A vous de choisir.",
+          "Vos thermostats sont connectes. En option, j'ai mis en place une regle : si vous n'etes pas chez vous, je reduis automatiquement la temperature."
+        ],
+        "outcome": "unlock_tier_smart"
+      }
+    ]
+  }

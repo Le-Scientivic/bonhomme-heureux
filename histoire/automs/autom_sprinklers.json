@@ -1,0 +1,60 @@
+{
+    "autom_id": "autom_sprinklers",
+    "label": "Systeme d'irrigation",
+    "icon": "sprinkleurs",
+    "description": "Controle du systeme d'arrosage exterieur et des sprinkleurs anti-incendie interieurs. Programmation, declenchement manuel.",
+  
+    "tiers": [
+      {
+        "id": "exterior",
+        "label": "Irrigation exterieure",
+        "actions": ["arroser_zone", "programmer_arrosage", "stopper_arrosage", "niveau_humidite"]
+      },
+      {
+        "id": "full",
+        "label": "Systeme complet interieur et exterieur",
+        "actions": ["arroser_zone", "programmer_arrosage", "stopper_arrosage", "niveau_humidite", "declenchement_sprinkleurs_interieurs", "mode_urgence"]
+      }
+    ],
+  
+    "usage_in_phases": {
+      "P1": ["Programmer l'arrosage du jardin", "Activer l'arrosage depuis le bureau"],
+      "P2": ["Arroser le jardin a distance", "Couper l'arrosage automatique avant une pluie"],
+      "P4_opensaw": ["Declencher les sprinkleurs interieurs pour tremper et derouter les intrus", "Rendre le sol glissant", "Endommager leurs appareils electroniques"]
+    },
+  
+    "owner_request_variants": [
+      "Bonjour {{player_name}}, j'ai installe un systeme d'arrosage automatique pour le jardin. Tu peux le configurer pour un arrosage programme ?",
+      "Salut {{player_name}} ! Mon systeme d'irrigation est connecte mais je sais pas comment le programmer. Tu peux m'aider ? Specs : [specifications], IP : [adresse IP].",
+      "{{player_name}}, j'ai un jardin et j'en ai marre d'arroser manuellement. J'ai investi dans un systeme connecte, tu peux le mettre en route ?",
+      "Hey, mon systeme d'arrosage est deregle depuis la mise a jour. Il s'active n'importe quand. Tu peux le recalibrer ? [adresse IP].",
+      "Bonjour {{player_name}}. J'ai aussi des sprinkleurs anti-incendie interieurs. Peux-tu les integrer au systeme de securite ?"
+    ],
+  
+    "player_response_options": [
+      {
+        "id": "accept_exterior",
+        "label": "Accepter — Irrigation exterieure",
+        "variants": [
+          "Compris. Je connecte votre systeme d'arrosage. Programmation et controle a distance disponibles.",
+          "Bien recu. Configuration du systeme d'irrigation en cours. Arrosage automatique operationnel sous peu.",
+          "Recu. J'integre votre systeme d'arrosage au reseau. Vous pourrez le programmer selon vos besoins.",
+          "Entendu. Systeme d'irrigation connecte. Planning d'arrosage configurable depuis votre telephone.",
+          "Parfait. Connexion etablie. Votre jardin sera arrose exactement quand vous le decidez."
+        ],
+        "outcome": "unlock_tier_exterior"
+      },
+      {
+        "id": "accept_plus",
+        "label": "Accepter + sprinkleurs interieurs",
+        "variants": [
+          "Je configure l'irrigation et j'integre egalement vos sprinkleurs interieurs au systeme de securite. Ils peuvent etre declenches manuellement ou automatiquement.",
+          "Bien recu. Systeme complet configure : arrosage exterieur programme et sprinkleurs interieurs accessibles a distance.",
+          "Recu. J'active l'integration complete. Jardin et securite incendie dans le meme systeme.",
+          "Configuration terminee. Arrosage exterieur et sprinkleurs interieurs sont maintenant pilotables depuis votre telephone.",
+          "Systeme complet operationnel. En cas d'urgence, vous pouvez declencher les sprinkleurs interieurs depuis n'importe ou."
+        ],
+        "outcome": "unlock_tier_full"
+      }
+    ]
+  }

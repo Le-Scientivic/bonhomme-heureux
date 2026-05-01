@@ -1,0 +1,60 @@
+{
+    "autom_id": "autom_shutters",
+    "label": "Volets connectes",
+    "icon": "volets",
+    "description": "Ouverture et fermeture des volets a distance. Mode nuit automatique. En phase dark : isolation visuelle totale.",
+  
+    "tiers": [
+      {
+        "id": "basic",
+        "label": "Controle basique",
+        "actions": ["ouvrir", "fermer", "position_partielle"]
+      },
+      {
+        "id": "scheduled",
+        "label": "Planning automatique",
+        "actions": ["ouvrir", "fermer", "position_partielle", "ouverture_programmee", "mode_nuit"]
+      }
+    ],
+  
+    "usage_in_phases": {
+      "P1": ["Ouvrir les volets le matin automatiquement", "Fermer a la nuit tombee"],
+      "P2": ["Fermer les volets pour la sieste", "Ouvrir pour laisser entrer la lumiere"],
+      "P4_opensaw": ["Fermeture totale silencieuse — couper toute visibilite vers l'exterieur", "Isoler la maison du regard de la rue"]
+    },
+  
+    "owner_request_variants": [
+      "Bonjour {{player_name}}, j'ai fait installer des volets connectes. Tu peux les integrer pour que je puisse les controler a distance ?",
+      "Salut {{player_name}} ! J'aimerais programmer mes volets pour qu'ils s'ouvrent tout seuls le matin. C'est possible ?",
+      "{{player_name}}, j'ai des volets motorises mais je sais pas comment les connecter. Voici les specs : [specifications], IP : [adresse IP].",
+      "Hey, mes volets sont connectes mais rien ne marche. Tu peux les reconfigurer ? [specifications], [adresse IP].",
+      "Bonjour {{player_name}}. Mes volets font n'importe quoi depuis la mise a jour. Tu peux les reinitialiser et les reprogrammer ?"
+    ],
+  
+    "player_response_options": [
+      {
+        "id": "accept_basic",
+        "label": "Accepter — Controle basique",
+        "variants": [
+          "Compris. Je connecte vos volets au systeme. Ouverture et fermeture a distance disponibles.",
+          "Bien recu. Configuration des volets en cours. Controle depuis votre telephone operationnel sous peu.",
+          "Recu. J'integre vos volets au reseau domotique. Vous pouvez les piloter de n'importe ou.",
+          "Entendu. Vos volets sont connectes. Position manuelle et a distance disponibles.",
+          "Parfait. Connexion etablie. Vos volets repondent maintenant a vos commandes."
+        ],
+        "outcome": "unlock_tier_basic"
+      },
+      {
+        "id": "accept_plus",
+        "label": "Accepter + planning automatique",
+        "variants": [
+          "Je configure le controle a distance et j'ajoute un planning : ouverture a l'heure que vous souhaitez, fermeture au coucher du soleil.",
+          "Bien recu. En plus du controle manuel, j'active une programmation automatique. Vos volets s'adaptent a la luminosite et a l'heure.",
+          "Recu. Controle a distance operationnel. J'ajoute egalement un mode nuit automatique et une simulation de presence.",
+          "Configuration terminee. J'ai mis en place des regles : ouverture progressive le matin, fermeture au crepuscule.",
+          "Vos volets sont connectes. J'ai aussi active une option utile : si vous etes absent, les volets s'ouvrent et se ferment aleatoirement pour simuler une presence."
+        ],
+        "outcome": "unlock_tier_scheduled"
+      }
+    ]
+  }

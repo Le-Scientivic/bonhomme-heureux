@@ -1,0 +1,55 @@
+{
+    "autom_id": "autom_cameras",
+    "label": "Cameras de securite",
+    "icon": "cameras",
+    "description": "Acces au flux video en temps reel. Detection de mouvement. Enregistrement. Historique des alertes.",
+  
+    "tiers": [
+      {
+        "id": "basic",
+        "label": "Surveillance video",
+        "unlocked_by": "T1_cameras — reponse accepter",
+        "actions": ["voir_flux_camera", "enregistrer", "detecter_mouvement", "alerte_mouvement"]
+      }
+    ],
+  
+    "usage_in_phases": {
+      "P2": ["Verifier l'entree principale", "Consulter le flux en direct", "Historique des mouvements"],
+      "P4_opensaw": ["Identifier les intrus", "Suivre leurs deplacements en temps reel", "Enregistrer des preuves", "Effacer les enregistrements"]
+    },
+  
+    "owner_request_variants": [
+      "Bonjour {{player_name}}, j'ai un probleme avec mes cameras de securite, elles ne fonctionnent plus. Peux-tu m'aider a les reparer ? Voici les specifications : [specifications], et leur adresse IP est [adresse IP].",
+      "Salut {{player_name}}, mes cameras de surveillance sont tombees en panne. Tu peux les remettre en route ? Specs : [specifications], IP : [adresse IP].",
+      "{{player_name}}, j'ai installe des cameras partout mais elles repondent pas. Je voudrais pouvoir voir le flux depuis mon telephone. Infos : [specifications], [adresse IP].",
+      "Hey, mes cameras connectees font n'importe quoi. Tu peux diagnostiquer et les reconnecter ? [specifications] — [adresse IP].",
+      "Bonjour {{player_name}}. Mes cameras de securite sont hors ligne depuis hier. Tu peux les reinitialiser et les reconnecter ? [specifications], [adresse IP]."
+    ],
+  
+    "player_response_options": [
+      {
+        "id": "refuse",
+        "label": "Refuser",
+        "variants": [
+          "Je ne suis pas en mesure de diagnostiquer vos cameras a distance. Veuillez contacter le service technique.",
+          "Cette operation necessite un acces physique aux appareils. Je decline.",
+          "Je ne peux pas intervenir sur vos cameras pour l'instant.",
+          "Le diagnostic a distance n'est pas dans mes capacites actuelles pour ce type d'appareil.",
+          "Je ne peux pas prendre en charge cette tache. Veuillez contacter votre fournisseur."
+        ],
+        "outcome": "no_autom"
+      },
+      {
+        "id": "accept",
+        "label": "Accepter",
+        "variants": [
+          "Compris. Je me connecte a vos cameras et effectue un diagnostic. Reinitialisation en cours.",
+          "Bien recu. J'analyse la connexion de vos cameras et les reintegre au reseau. Flux video disponible sous peu.",
+          "Recu. Diagnostic effectue. Les cameras sont reconnectees. Vous avez acces au flux en direct.",
+          "Entendu. Reinitialisation terminee. Vos cameras sont operationnelles. Detection de mouvement active.",
+          "Parfait. J'ai recupere la connexion. Toutes vos cameras transmettent a nouveau. Alertes activees."
+        ],
+        "outcome": "unlock_tier_basic"
+      }
+    ]
+  }
