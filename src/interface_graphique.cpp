@@ -2,38 +2,50 @@
 
 using namespace ftxui;
 
-
-std::bitset<MODULE_BIT_COUNT> init_modules(){
-    std::bitset<MODULE_BIT_COUNT> uiModules;
-    uiModules.set(INPUT);
-    uiModules.reset(CHAT);
-    uiModules.reset(AUTOMATIONS);
-    uiModules.reset(VIDEO);
-    return uiModules;
+// This is a helper function to create a button with a custom style.
+// The style is defined by a lambda function that takes an EntryState and
+// returns an Element.
+// We are using `center` to center the text inside the button, then `border` to
+// add a border around the button, and finally `flex` to make the button fill
+// the available space.
+ButtonOption Style() {
+  auto option = ButtonOption::Animated();
+  option.transform = [](const EntryState& s) {
+    auto element = text(s.label);
+    if (s.focused) {
+      element |= bold;
+    }
+    return element | center | borderEmpty | flex;
+  };
+  return option;
 }
 
-void display_modules(std::bitset<MODULE_BIT_COUNT> uiModules,) {
-    bool isInputEnabled = uiModules.test(INPUT);
 
-    // Créer une instance du module input
-    InputModule input_module("Vous: ", " > ");
-    input_module.set_placeholder("Tapez votre message...");
+void test() {
+    int value = 50;
 
-    // Créer le composant input rendu
-    auto input_component = input_module.render();
+  // The tree of components. This defines how to navigate using the keyboard.
+  auto buttons = Container::Horizontal({
+      Button(
+          "Decrease", [&] { value--; }, ButtonOption::Animated(Color::Red)),
+      Button(
+          "Reset", [&] { value = 50; }, ButtonOption::Animated(Color::Green)),
+      Button(
+          "Increase", [&] { value++; }, ButtonOption::Animated(Color::Blue)),
+  });
 
-    // Créer le layout principal avec le module input
-    auto main_layout = Renderer(input_component, [&] {
-        return vbox({
-            text("Bienvenue dans l'interface modulaire") | bold | center,
+  // Modify the way to render them on screen:
+  auto component = Renderer(buttons, [&] {
+    return vbox({
+        vbox({
+            text("value = " + std::to_string(value)),
             separator(),
-            text("Module INPUT activé") | center,
-            separator(),
-            input_component->Render(),
-        }) | border;
+            gauge(value * 0.01f),
+        }) | border,
+        buttons->Render(),
     });
+  });
 
-    //affiche les élément ftxui sur le terminal
-    auto affichage = ScreenInteractive::Fullscreen();
-    affichage.Loop(main_layout);
+  auto screen = ScreenInteractive::FitComponent();
+  screen.Loop(component);
 }

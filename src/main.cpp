@@ -9,6 +9,7 @@
 #include <ftxui/dom/elements.hpp>
 
 #include "interface_graphique.hpp"
+#include "tests/exemples.hpp"
 
 using namespace ftxui;
 
@@ -333,34 +334,7 @@ void show_ending(const Ending& ending, const State& s) {
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 int main() {
-    init_modules();
-    display_modules();
-
-    /*
-    auto scenes  = make_scenes();
-    auto screen  = ScreenInteractive::TerminalOutput();
-    State state;
-    int   current = 0;
-
-    while (true) {
-        if (current == -1) {
-            show_ending(compute_ending(state), state);
-            break;
-        }
-
-        auto it = scenes.find(current);
-        if (it == scenes.end()) {
-            show_ending(compute_ending(state), state);
-            break;
-        }
-
-        int choice = run_scene(screen, it->second, state);
-        if (choice < 0) break;
-
-        const auto& c = it->second.choices[choice];
-        state.apply(c.dh, c.de, c.dp);
-        current = c.next_scene;
-    }*/
+    run_examples_menu();
 
     return 0;
 }

@@ -1,0 +1,11 @@
+{
+    "clangd.arguments": [
+        "--compile-commands-dir=build",
+        "--header-insertion=never",
+        "-j=4"
+    ],
+    "clangd.onClangdCrashed": "ignore",
+    "[cpp]": {
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    }
+}
