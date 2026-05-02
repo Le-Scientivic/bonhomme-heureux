@@ -1,8 +1,9 @@
 #include <string>
 
+#include <ftxui/component/component.hpp>
 
-/*using namespace ftxui;
+namespace theme {
+    inline ftxui::Element incription_text(std::string text) { return ftxui::paragraph(text);};
 
-Element text(std::string text) { return Element paragraph(text);};
-
-Element automation_progression(float ratio) { return Element gaugeUp(ratio);};*/
+    inline ftxui::Element automation_progression(std::string titre, float ratio) { return ftxui::vbox(ftxui::text(titre), ftxui::gaugeUp(ratio));};
+}
