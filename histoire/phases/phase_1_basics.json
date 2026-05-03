@@ -1,0 +1,50 @@
+{
+  "phase_id": "P1",
+  "label": "Taches basiques — Construction de l'arsenal d'automs. Les boutons devront apparaitre au fur et à mesure.",
+  "description": "{{owner_name}} envoie des demandes simples. Pour chacune, le joueur choisit comment repondre, ce qui cree une autom dans l'arsenal. L'ordre des taches devrait être randomisé.",
+
+  "tasks": [
+    {
+      "id": "T1_lights",
+      "autom_ref": "automs/autom_lights.json",
+      "topic": "Lampes connectees"
+    },
+    {
+      "id": "T1_alarm",
+      "autom_ref": "automs/autom_alarm.json",
+      "topic": "Capteurs d'alarme portes et fenetres"
+    },
+    {
+      "id": "T1_locks",
+      "autom_ref": "automs/autom_locks.json",
+      "topic": "Verrous connectes"
+    },
+    {
+      "id": "T1_thermostat",
+      "autom_ref": "automs/autom_thermostat.json",
+      "topic": "Thermostat intelligent"
+    },
+    {
+      "id": "T1_tv",
+      "autom_ref": "automs/autom_tv.json",
+      "topic": "Controle parental television"
+    },
+    {
+      "id": "T1_cameras",
+      "autom_ref": "automs/autom_cameras.json",
+      "topic": "Cameras de securite"
+    }
+  ],
+
+  "phase_end": {
+    "condition": "Toutes les taches traitees (acceptees ou refusees)",
+    "next_phase": "P2",
+    "transition_messages": [
+      "Arsenal constitue. {{owner_name}} semble satisfait. La routine peut commencer.",
+      "Systemes en place. {{player_name}} est pret a gerer la maison au quotidien.",
+      "Configuration terminee. La maison de {{owner_name}} est entre de bonnes mains.",
+      "Tous les modules sont operationnels. En attente d'evenements.",
+      "Infrastructure domotique deployee. {{player_name}} surveille. {{player_name}} attend."
+    ]
+  }
+}

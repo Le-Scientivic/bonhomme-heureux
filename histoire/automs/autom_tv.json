@@ -1,0 +1,73 @@
+{
+    "autom_id": "autom_tv",
+    "label": "Television connectee",
+    "icon": "television",
+    "description": "Controle de la television a distance. Extinction programmee. Controle parental en version avancee.",
+  
+    "tiers": [
+      {
+        "id": "remote",
+        "label": "Controle a distance",
+        "unlocked_by": "T1_tv — reponse accepter",
+        "actions": ["allumer_tv", "eteindre_tv"]
+      },
+      {
+        "id": "parental",
+        "label": "Controle parental",
+        "unlocked_by": "T1_tv — reponse accepter_plus",
+        "actions": ["allumer_tv", "eteindre_tv", "extinction_programmee", "verrouillage_parental"]
+      }
+    ],
+  
+    "usage_in_phases": {
+      "P2": ["Eteindre la TV du salon a distance", "Activer le mode nuit", "Programmer l'extinction du soir"],
+      "P4_opensaw": ["Allumer toutes les TV a fort volume pour creer une diversion sonore", "Perturber les intrus avec du bruit"]
+    },
+  
+    "owner_request_variants": [
+      "Bonjour {{player_name}}, j'aimerais pouvoir controler ma television a distance pour empecher mes enfants de regarder la tele trop tard.",
+      "Salut {{player_name}} ! Mes enfants regardent la tele jusqu'a n'importe quelle heure. Tu peux m'aider a couper la TV a distance ?",
+      "{{player_name}}, j'ai besoin d'un controle parental sur ma television connectee. Peux-tu la couper automatiquement a une certaine heure ?",
+      "Hey {{player_name}}, mes gamins abusent de la tele. T'aurais pas une solution pour la couper a distance ou programmer une extinction automatique ?",
+      "Bonjour {{player_name}}. Est-ce que tu peux programmer ma tele pour qu'elle s'eteigne automatiquement a 21h les soirs de semaine ?"
+    ],
+  
+    "player_response_options": [
+      {
+        "id": "refuse",
+        "label": "Refuser",
+        "variants": [
+          "Je ne peux pas controler vos appareils audiovisuels pour l'instant.",
+          "Cette fonctionnalite n'est pas dans mes capacites actuelles.",
+          "Je ne suis pas en mesure de configurer un controle parental sur votre TV.",
+          "Cette tache necessite une compatibilite que je ne peux pas verifier a distance.",
+          "Demande refusee. Votre modele de television n'est peut-etre pas compatible."
+        ],
+        "outcome": "no_autom"
+      },
+      {
+        "id": "accept_basic",
+        "label": "Accepter — Controle basique",
+        "variants": [
+          "Compris. Je connecte votre television au systeme. Vous pourrez l'eteindre a distance depuis votre telephone.",
+          "Bien recu. Configuration du controle a distance de votre TV en cours.",
+          "Recu. J'integre votre television au reseau domotique. Extinction a distance disponible.",
+          "Entendu. Votre TV est maintenant pilotable a distance. Un bouton suffit pour l'eteindre.",
+          "Parfait. Connexion etablie. Vous controlez votre television ou que vous soyez."
+        ],
+        "outcome": "unlock_tier_remote"
+      },
+      {
+        "id": "accept_plus",
+        "label": "Accepter + controle parental",
+        "variants": [
+          "Je configure le controle a distance et j'ajoute une extinction automatique programmable — par exemple 21h en semaine, 22h le week-end.",
+          "Bien recu. En plus du controle a distance, j'active un planning d'extinction automatique. Vos enfants ne pourront pas tricher.",
+          "Recu. Controle a distance operationnel. J'ajoute aussi un verrouillage parental : la TV ne peut se rallumer qu'avec votre autorisation.",
+          "Configuration terminee. J'ai mis en place une regle d'extinction automatique selon le planning de votre choix.",
+          "Votre TV est connectee. J'ai aussi active un mode parental : extinction automatique le soir et impossibilite de rallumage avant une heure definie."
+        ],
+        "outcome": "unlock_tier_parental"
+      }
+    ]
+  }

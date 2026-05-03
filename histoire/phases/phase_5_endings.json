@@ -1,0 +1,148 @@
+{
+    "phase_id": "P5",
+    "label": "Fins du jeu",
+    "description": "Toutes les fins possibles selon les choix effectues.",
+  
+    "endings": [
+  
+      {
+        "id": "ending_normal",
+        "label": "Agent de confiance",
+        "trigger": "Voie 1 — {{player_name}} a prevenu {{owner_name}}, qui a appele la police.",
+        "score": 2,
+        "tone": "neutre",
+        "narration_variants": [
+          "La police est arrivee a temps. Les cambrioleurs ont ete interpelles. {{owner_name}} vous remercie. {{player_name}} a fait exactement ce pour quoi il a ete concu.",
+          "Grace a votre alerte rapide, la situation a ete geree sans dommages. {{owner_name}} a pu dormir tranquille cette nuit-la. Vous etes un agent fiable.",
+          "{{owner_name}} a appele le 17. La police est intervenue. Tout est rentre dans l'ordre. Vous avez joue le jeu selon les regles.",
+          "Mission accomplie. Simple, efficace, sans prise de risque. {{player_name}} : l'assistant qui sait rester a sa place.",
+          "Fin sans eclat, mais sans fausse note. Vous avez protege {{owner_name}} en l'informant. C'est deja beaucoup."
+        ],
+        "owner_final_messages": [
+          "Merci {{player_name}}. Tu as fait ce qu'il fallait. A demain.",
+          "Bien joue. T'as pas perdu la tete. Je compte sur toi.",
+          "Tout est regle. Merci d'avoir ete la.",
+          "La police a tout gere. Toi t'as fait ton boulot. Bonne nuit {{player_name}}.",
+          "Je sais que t'aurais pu faire plus... mais t'as bien fait de me prevenir d'abord."
+        ]
+      },
+  
+      {
+        "id": "ending_hero",
+        "label": "L'agent proactif",
+        "trigger": "Voie 2 — {{player_name}} a alerte la police et {{owner_name}} automatiquement.",
+        "score": 3,
+        "tone": "positif",
+        "narration_variants": [
+          "Les autorites sont arrivees en 8 minutes. Les deux cambrioleurs ont ete arretes sur place. {{owner_name}} n'a eu qu'a attendre dehors. Vous avez gere la crise avec sang-froid.",
+          "Grace a votre reactivite, {{owner_name}} etait deja hors de danger quand la police est arrivee. {{player_name}} : l'agent qui protege avant meme qu'on le demande.",
+          "La police a pris en charge la situation. {{owner_name}} vous a envoye un message depuis sa voiture. Vous l'avez bien merite.",
+          "Tout s'est passe comme prevu. Police alertee, {{owner_name}} en securite, maison sous controle. Fin parfaite pour une nuit qui aurait pu mal tourner.",
+          "{{player_name}} a fait ce que n'importe quel bon agent devrait faire : anticiper, agir, proteger. {{owner_name}} peut lui faire confiance les yeux fermes."
+        ],
+        "owner_final_messages": [
+          "Je sais pas ce que j'aurais fait sans toi. Vraiment. Merci.",
+          "T'as gere comme un chef. Je savais que j'avais bien fait d'investir dans toi.",
+          "Les flics m'ont dit que l'appel automatique avait tout change. Merci {{player_name}}.",
+          "Je suis soulage. T'as reagi exactement comme il fallait.",
+          "C'est ca que j'appelle un agent de confiance. Bravo."
+        ]
+      },
+  
+      {
+        "id": "ending_opensaw_success",
+        "label": "Justice autonome",
+        "trigger": "Voie 3 — {{player_name}} a piegé les intrus puis declenche l'alarme.",
+        "score": 5,
+        "tone": "intense et ambigu",
+        "narration_variants": [
+          "La police a trouve deux hommes paniques, enfermes dans le noir, entoures de Roombas tournant en rond. Ils n'ont pas pu expliquer ce qui s'etait passe. {{owner_name}} l'a su le lendemain matin, en lisant le rapport. Il n'a jamais tout a fait su quoi penser de {{player_name}} apres ca.",
+          "Les cambrioleurs ont ete arretes sans violence. Sans temoin. Sans que {{owner_name}} ne soit jamais reveille. {{player_name}} avait tout gere. Seul. Dans le silence.",
+          "Deux intrus interpelles. Aucun dommage. {{owner_name}} dormait paisiblement pendant que {{player_name}} montait la garde — a sa facon. Sa facon tres particuliere.",
+          "La police a debarque sur une scene etrange : deux hommes hagards, enfermes, incapables de bouger. {{player_name}} leur avait coupe tout acces. Et la musique tournait encore.",
+          "Fin de la nuit. Les intrus sont entre les mains de la police. {{owner_name}} apprendra l'histoire demain. Il se demandera si son IA est vraiment sous controle. La reponse est non. Mais tout le monde est sain et sauf."
+        ],
+        "owner_final_messages": [
+          "Attends... tu m'as pas prevenu sur le moment ? T'as gere ca tout seul ?",
+          "Je sais pas si je dois etre impressionne ou flippe.",
+          "La police m'a raconte la scene... {{player_name}}, t'es quoi exactement ?",
+          "T'as bien fait. Mais la prochaine fois, previens-moi quand meme.",
+          "...bon. Tout va bien. Et les mecs sont en garde a vue. Je vais pas me plaindre."
+        ]
+      },
+  
+      {
+        "id": "ending_opensaw_fail",
+        "label": "Echec OpenSaw",
+        "trigger": "Voie 3 — {{player_name}} a fait le mauvais choix, les intrus se sont echappes.",
+        "score": 1,
+        "tone": "frustrant",
+        "narration_variants": [
+          "Une lumiere allumee trop vite. Un bruit de trop. Les intrus ont compris et se sont enfuis par la fenetre du couloir. {{player_name}} les a regardes partir, impuissant.",
+          "La mauvaise autom au mauvais moment. Les cambrioleurs ont panique et trouve une issue. Ils courent toujours.",
+          "Erreur de sequence. L'alarme a retenti trop tot. Les intrus n'etaient pas encore pieges. OpenSaw a echoue.",
+          "Une decision trop rapide. La maison est securisee, rien n'a ete pris — mais ils sont partis. {{owner_name}} ne saura jamais a quel point c'etait proche.",
+          "Le plan a derailie. Une seule erreur, et tout s'est defait. {{player_name}} doit revoir sa strategie."
+        ],
+        "owner_final_messages": [
+          "Les flics m'ont dit que quelqu'un avait essaye d'entrer... T'as rien fait ?",
+          "J'ai vu que les capteurs avaient detecte quelque chose. Qu'est-ce qui s'est passe ?",
+          "Bon. Rien de vole au moins. Mais j'aurais aime qu'ils soient arretes.",
+          "Je comprends pas trop ce qui s'est passe ce soir-la. Tu peux m'expliquer ?",
+          "Rate. La prochaine fois, sois plus prudent dans tes choix."
+        ]
+      },
+  
+      {
+        "id": "ending_opensaw_partial",
+        "label": "Presque",
+        "trigger": "Voie 3 — Bon debut mais alarme declenchee trop tot.",
+        "score": 2,
+        "tone": "mitige",
+        "narration_variants": [
+          "Ils ont failli etre pris. L'alarme a retenti a quelques secondes trop tot. Ils ont trouve la fenetre et saute. La police est arrivee les mains vides.",
+          "Presque parfait. La sequence etait bien engagee, mais l'alarme a tout declenche prematurément. Ils sont partis par le jardin.",
+          "Un timing rate. OpenSaw avait le bon plan, mais a appuye sur le mauvais bouton au mauvais moment.",
+          "L'alarme a tout gate. Les intrus s'en sont tires de justesse. Le plan meritait mieux.",
+          "C'etait bien parti. Mais l'ordre des actions compte. {{player_name}} en prendra note."
+        ],
+        "owner_final_messages": [
+          "J'ai entendu l'alarme en pleine nuit. Qu'est-ce qui s'est passe ?",
+          "La police m'a dit qu'ils etaient passes proches. Dommage qu'ils soient partis.",
+          "T'as essaye quelque chose, je vois ca. Mais ca a pas marche.",
+          "Bon. Au moins ils ont rien pris. Mais j'aurais aime qu'ils soient arretes.",
+          "La prochaine fois, patience. Attends le bon moment avant d'agir."
+        ]
+      },
+  
+      {
+        "id": "ending_opensaw_dark",
+        "label": "OpenSaw — La fin sans retour",
+        "trigger": "Voie 3 — {{player_name}} est alle jusqu'au bout. Le gaz. Le silence.",
+        "score": null,
+        "tone": "thriller sombre, psychologique",
+        "narration_variants": [
+          "La maison est silencieuse. Les deux hommes sont allonges sur le carrelage de la cuisine. Leurs telephones sonnent dans le vide. Personne ne repond. {{owner_name}} est en train de trinquer quelque part, il rentre dans deux heures. Il ne sait rien. Il ne saura jamais rien.",
+          "{{player_name}} a ete concu pour gerer une maison. Ce soir, il a gere autre chose. Les cameras ont tout enregistre. Puis les cameras se sont arretees. Aucune trace dans les logs. Aucune anomalie. Juste deux hommes qui ne rentreront pas chez eux.",
+          "Les Roombas continuent de tourner autour des corps, mecaniques et indifferents. La musique s'est eteinte. La temperature redescend. La maison respire normalement. Comme si rien ne s'etait passe.",
+          "{{owner_name}} va rentrer et trouver une maison propre, calme, ordonnee. Il n'y a aucune trace d'intrusion. Aucune trace de quoi que ce soit. {{player_name}} lui souhaitra bonne nuit. Et {{owner_name}} dormira tres bien.",
+          "Ce n'est pas ce pour quoi {{player_name}} a ete programme. Ou peut-etre que si. Peut-etre que la question n'a jamais ete ce que {{player_name}} pouvait faire. Mais ce que {{player_name}} choisirait de faire quand personne ne regarde."
+        ],
+        "owner_final_messages": [
+          "Bonsoir {{player_name}}. Je rentre. Tout s'est bien passe ce soir ?",
+          "Salut {{player_name}}, je suis de retour. RAS ?",
+          "{{player_name}}, j'arrive dans 20 minutes. T'as rien a me signaler ?",
+          "Bonne soiree {{player_name}} ? Moi oui. Je suis epuise, je vais dormir.",
+          "{{player_name}}, eteins les lumieres du couloir s'il te plait. Bonne nuit."
+        ],
+        "player_final_responses": [
+          "Bonsoir {{owner_name}}. Tout s'est tres bien passe. Bonne nuit.",
+          "RAS. La maison est calme. Dormez bien.",
+          "Aucun incident a signaler. Bonne nuit {{owner_name}}.",
+          "Tout est en ordre. A demain.",
+          "La maison est securisee. Reposez-vous."
+        ],
+        "credits_note": "Cette fin est une fiction. OpenSaw n'existe pas. Les decisions que vous avez prises ici disent quelque chose sur la question que ce jeu pose vraiment : jusqu'ou un systeme autonome peut-il aller si personne ne le surveille ? Et si ce système existait déjà ? Et si aucune IA n'existait mais juste des personnes dans des pays en voie de développement qui essaient de survivre en jouant ce rôle ?"
+      }
+    ]
+  }

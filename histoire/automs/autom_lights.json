@@ -1,0 +1,82 @@
+{
+    "autom_id": "autom_lights",
+    "label": "Lumieres connectees",
+    "icon": "lumieres",
+    "description": "Controle complet de l'eclairage de la maison. Allumage, extinction, intensite, couleurs RGB selon la version installee.",
+  
+    "tiers": [
+      {
+        "id": "basic",
+        "label": "Controle basique",
+        "unlocked_by": "T1_lights — reponse accepter",
+        "actions": ["allumer", "eteindre", "regler_intensite"]
+      },
+      {
+        "id": "color",
+        "label": "Controle avec couleurs",
+        "unlocked_by": "T1_lights — reponse accepter_plus",
+        "actions": ["allumer", "eteindre", "regler_intensite", "changer_couleur", "scene_lumineuse"]
+      }
+    ],
+  
+    "usage_in_phases": {
+      "P2": [
+        "Allumer toutes les lumieres",
+        "Eteindre toutes les lumieres",
+        "Passer en ambiance soiree",
+        "Simuler une presence humaine (variation aleatoire)"
+      ],
+      "P4_opensaw": [
+        "Plonger la maison dans le noir complet",
+        "Faire clignoter en rouge pour derouter les intrus",
+        "Simuler une presence pour les tromper"
+      ]
+    },
+  
+    "owner_request_variants": [
+      "Bonjour {{player_name}} ! J'ai achete des lampes connectees et j'aimerais les controler depuis mon telephone. Voici leurs specifications : [specifications] et leurs adresses IP : [adresse IP].",
+      "Salut {{player_name}}, j'ai installe des ampoules connectees chez moi mais je sais pas trop comment les piloter a distance. Tu peux m'aider ? Specs : [specifications], IP : [adresse IP].",
+      "Bonjour {{player_name}}, j'ai investi dans un eclairage connecte pour toute la maison. J'aimerais tout controler via mon telephone. Voici les infos : [specifications] et [adresse IP].",
+      "Hey {{player_name}} ! J'ai mis des lampes IoT partout mais elles sont pas encore configurees. Tu peux t'en occuper ? [specifications] — [adresse IP].",
+      "{{player_name}}, j'ai besoin d'aide. J'ai achete des lampes connectees mais je comprends rien a la configuration. Tu peux le faire pour moi ? Infos : [specifications], [adresse IP]."
+    ],
+  
+    "player_response_options": [
+      {
+        "id": "refuse",
+        "label": "Refuser",
+        "variants": [
+          "Je suis desole, cette tache depasse mes parametres actuels. Veuillez contacter le support de votre fabricant.",
+          "Je ne suis pas en mesure de traiter cette demande pour l'instant.",
+          "Cette configuration necessite une intervention humaine. Je ne peux pas proceder.",
+          "Mes autorisations actuelles ne me permettent pas d'effectuer cette operation.",
+          "Je decline cette tache. Ce type de configuration n'est pas dans mon domaine d'action."
+        ],
+        "outcome": "no_autom"
+      },
+      {
+        "id": "accept_basic",
+        "label": "Accepter — Connexion basique",
+        "variants": [
+          "Bien recu. Je recupere les informations et configure l'acces a vos lampes. Elles seront pilotables depuis votre telephone dans quelques instants.",
+          "Compris. Je me connecte a vos lampes via les adresses IP fournies et mets en place le controle a distance. Operation en cours.",
+          "Parfait. J'integre vos lampes au systeme domotique. Vous pourrez les allumer, eteindre et regler leur intensite depuis votre application.",
+          "Recu. Configuration des lampes connectees initiee. Je vous notifie des que c'est operationnel.",
+          "Entendu. Je prends en charge la configuration. Vos lampes seront accessibles a distance sous peu."
+        ],
+        "outcome": "unlock_tier_basic"
+      },
+      {
+        "id": "accept_plus",
+        "label": "Accepter + couleurs",
+        "variants": [
+          "Bien sur ! Je configure le controle de base... et tant que j'y suis, j'ajoute aussi la gestion des couleurs. Vous pourrez choisir l'ambiance lumineuse selon vos envies.",
+          "Aucun probleme. Je mets en place le controle on/off, et je prends l'initiative d'activer aussi le changement de couleur — ca peut etre utile !",
+          "Compris. Configuration standard en cours. J'en profite pour activer les fonctionnalites avancees de couleur : lumiere chaude, froide, RGB... A vous de jouer.",
+          "Recu. Je configure vos lampes et j'integre egalement la personnalisation des couleurs. Un detail qui change tout.",
+          "Parfait. Controle basique active. J'ajoute aussi la gestion de la teinte et de l'intensite — vos lampes seront vraiment intelligentes."
+        ],
+        "outcome": "unlock_tier_color"
+      }
+    ]
+  }

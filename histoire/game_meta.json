@@ -1,0 +1,33 @@
+{
+    "_comment": "Fichier de configuration globale. Pour personnaliser le jeu, éditez les champs 'player_name' et 'owner_name'. Ces valeurs sont utilisées comme variables dans tous les autres fichiers sous la forme {{player_name}} et {{owner_name}}.",
+  
+    "game": {
+      "title": "OpenClaw",
+      "version": "1.0.0",
+      "language": "fr"
+    },
+  
+    "variables": {
+      "player_name": "OpenClaw",
+      "owner_name": "Marcus",
+      "_note": "Remplacez 'OpenClaw' et 'Marcus' par les noms souhaites. Tous les fichiers de dialogue utilisent {{player_name}} et {{owner_name}} comme placeholders."
+    },
+  
+    "phases": [
+      { "id": "P0", "label": "Introduction", "file": "phases/phase_0_intro.json" },
+      { "id": "P1", "label": "Taches basiques", "file": "phases/phase_1_basics.json" },
+      { "id": "P2", "label": "Activation des automs", "file": "phases/phase_2_live.json" },
+      { "id": "P3", "label": "Taches complexes", "file": "phases/phase_3_advanced.json" },
+      { "id": "P4", "label": "Le Cambriolage", "file": "phases/phase_4_burglary.json" },
+      { "id": "P5", "label": "Fins", "file": "phases/phase_5_endings.json" }
+    ],
+  
+    "automs_directory": "automs/",
+  
+    "intro_text": {
+      "_comment": "Texte d'introduction affiche avant le demarrage du jeu.",
+      "title": "OpenClaw",
+      "subtitle": "Un agent. Une maison. Toute la puissance du monde connecte.",
+      "body": "Vous etes OpenClaw. Un agent d'intelligence artificielle de nouvelle generation, dedie a la gestion domotique de la maison de {{owner_name}}. Lumières, serrures, cameras, capteurs — tout est sous votre controle. {{owner_name}} vous fait confiance. La maison vous appartient. Ce que vous en faites... c'est votre histoire."
+    }
+  }

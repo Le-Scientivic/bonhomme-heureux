@@ -1,0 +1,60 @@
+{
+    "autom_id": "autom_screens",
+    "label": "Ecrans connectes",
+    "icon": "ecrans",
+    "description": "Controle centralise de tous les ecrans de la maison : televisions, tablettes murales, cadres connectes. Diffusion de messages, affichage d'informations.",
+  
+    "tiers": [
+      {
+        "id": "display",
+        "label": "Affichage centralise",
+        "actions": ["allumer_ecran", "eteindre_ecran", "afficher_contenu", "diffuser_message"]
+      },
+      {
+        "id": "broadcast",
+        "label": "Broadcast multi-ecrans",
+        "actions": ["allumer_ecran", "eteindre_ecran", "afficher_contenu", "diffuser_message", "broadcast_toutes_pieces", "affichage_urgence", "contenu_programme"]
+      }
+    ],
+  
+    "usage_in_phases": {
+      "P1": ["Afficher la meteo sur le cadre connecte", "Programmer l'extinction des ecrans la nuit"],
+      "P2": ["Envoyer un message a {{owner_name}} sur la TV du salon", "Afficher des rappels sur les ecrans"],
+      "P4_opensaw": ["Afficher un message sur tous les ecrans simultanement", "Desorienter les intrus par un broadcast lumineux soudain dans le noir"]
+    },
+  
+    "owner_request_variants": [
+      "Bonjour {{player_name}}, j'ai installe des cadres connectes et une tablette murale. Tu peux les integrer pour afficher des infos utiles ?",
+      "Salut {{player_name}} ! J'aimerais pouvoir envoyer des messages sur la TV du salon depuis mon telephone. C'est possible ?",
+      "{{player_name}}, j'ai plusieurs ecrans dans la maison. Tu peux creer un systeme pour broadcaster des annonces dans toutes les pieces ?",
+      "Hey, mon systeme d'affichage est deconnecte depuis la mise a jour. Tu peux le reconfigurer ? Specs : [specifications], IP : [adresse IP].",
+      "Bonjour {{player_name}}. J'aimerais afficher des informations sur mes ecrans selon l'heure : meteo le matin, agenda en journee. C'est faisable ?"
+    ],
+  
+    "player_response_options": [
+      {
+        "id": "accept_display",
+        "label": "Accepter — Affichage basique",
+        "variants": [
+          "Compris. Je connecte vos ecrans au systeme. Affichage et controle a distance disponibles.",
+          "Bien recu. Configuration des ecrans connectes en cours. Controle depuis votre telephone operationnel.",
+          "Recu. J'integre vos ecrans au reseau. Vous pourrez envoyer du contenu et des messages a distance.",
+          "Entendu. Vos ecrans sont connectes. Affichage a distance active.",
+          "Parfait. Connexion etablie. Vous controllez maintenant tous vos ecrans depuis votre telephone."
+        ],
+        "outcome": "unlock_tier_display"
+      },
+      {
+        "id": "accept_plus",
+        "label": "Accepter + broadcast multi-ecrans",
+        "variants": [
+          "Je configure les ecrans et j'ajoute un systeme de broadcast : un message, tous les ecrans simultanement.",
+          "Bien recu. En plus du controle individuel, j'active le broadcast general. Toutes les pieces peuvent recevoir le meme message en meme temps.",
+          "Recu. Systeme complet configure : controle individuel, broadcast et contenu programme selon l'heure.",
+          "Configuration terminee. Chaque ecran est pilotable et vous pouvez diffuser vers tous en un clic.",
+          "Ecrans connectes avec broadcast operationnel. En cas d'urgence, vous pouvez envoyer une alerte sur tous les ecrans simultanement."
+        ],
+        "outcome": "unlock_tier_broadcast"
+      }
+    ]
+  }

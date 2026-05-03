@@ -1,0 +1,81 @@
+{
+    "autom_id": "autom_locks",
+    "label": "Verrous connectes",
+    "icon": "verrous",
+    "description": "Verrouillage et deverrouillage des portes a distance. Controle individuel ou global. Planning automatique en version avancee.",
+  
+    "tiers": [
+      {
+        "id": "basic",
+        "label": "Controle basique",
+        "unlocked_by": "T1_locks — reponse accepter",
+        "actions": ["verrouiller", "deverrouiller", "statut_verrou"]
+      },
+      {
+        "id": "schedule",
+        "label": "Planning automatique",
+        "unlocked_by": "T1_locks — reponse accepter_plus",
+        "actions": ["verrouiller", "deverrouiller", "verrouillage_programme", "mode_tout_verrouiller"]
+      }
+    ],
+  
+    "usage_in_phases": {
+      "P2": [
+        "Verifier si toutes les portes sont verrouillees",
+        "Verrouiller depuis le bureau",
+        "Programmer le verrouillage du soir"
+      ],
+      "P4_opensaw": [
+        "Verrouiller toutes les issues silencieusement",
+        "Activer le mode confinement",
+        "Empecher toute fuite"
+      ]
+    },
+  
+    "owner_request_variants": [
+      "Bonjour {{player_name}}, j'ai remplace mes verrous par des verrous connectes. Tu peux faire en sorte que je puisse verrouiller et deverrouiller a distance ?",
+      "Salut {{player_name}} ! J'ai installe des serrures connectees sur toutes mes portes. J'aimerais pouvoir les controler depuis mon telephone.",
+      "{{player_name}}, j'ai mis des verrous intelligents chez moi. Peux-tu les configurer pour que je puisse les piloter a distance ?",
+      "Hey, j'ai change toutes mes serrures pour des modeles connectes. J'ai besoin de ton aide pour les integrer au systeme.",
+      "Bonjour {{player_name}}. J'ai investi dans des verrous connectes. J'aimerais pouvoir ouvrir et fermer mes portes a distance, tu peux faire ca ?"
+    ],
+  
+    "player_response_options": [
+      {
+        "id": "refuse",
+        "label": "Refuser",
+        "variants": [
+          "Je ne suis pas autorise a configurer des systemes de verrouillage. Pour des raisons de securite, cette operation requiert une intervention humaine.",
+          "Cette demande depasse mes autorisations. Je vous recommande de contacter le fabricant de vos verrous.",
+          "Je decline. La gestion des acces physiques ne fait pas partie de mes fonctions actuelles.",
+          "Configuration des verrous refusee. Veuillez proceder manuellement ou contacter un technicien.",
+          "Je ne peux pas prendre en charge cette tache pour l'instant."
+        ],
+        "outcome": "no_autom"
+      },
+      {
+        "id": "accept_basic",
+        "label": "Accepter — Controle basique",
+        "variants": [
+          "Bien recu. Je connecte vos verrous au systeme. Vous pourrez les verrouiller et deverrouiller depuis votre telephone a tout moment.",
+          "Compris. Configuration des verrous connectes en cours. Acces a distance operationnel sous peu.",
+          "Recu. J'integre vos serrures connectees au reseau domotique. Controle a distance active.",
+          "Entendu. Vos verrous sont desormais sous controle centralise. Vous pouvez les piloter depuis n'importe ou.",
+          "Parfait. Connexion aux verrous etablie. Verrouillage et deverrouillage a distance disponibles."
+        ],
+        "outcome": "unlock_tier_basic"
+      },
+      {
+        "id": "accept_plus",
+        "label": "Accepter + planning automatique",
+        "variants": [
+          "Configuration en cours. J'ajoute aussi un verrouillage automatique programme — par exemple, toutes les portes se verrouillent a 23h. Pratique, non ?",
+          "Recu. Je mets en place le controle a distance et j'integre une option de verrouillage automatique selon un planning que vous definissez.",
+          "Vos verrous sont configures. En option, j'ai aussi active une regle : si une porte reste deverrouillee trop longtemps, je vous envoie une alerte.",
+          "Bien recu. Controle a distance operationnel. J'ajoute egalement la possibilite de verrouiller toute la maison en un clic.",
+          "Configuration terminee. J'ai pris l'initiative d'ajouter un mode 'tout verrouiller' accessible d'un seul geste depuis votre telephone."
+        ],
+        "outcome": "unlock_tier_schedule"
+      }
+    ]
+  }

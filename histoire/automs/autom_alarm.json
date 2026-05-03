@@ -1,0 +1,73 @@
+{
+    "autom_id": "autom_alarm",
+    "label": "Capteurs d'alarme",
+    "icon": "alarme",
+    "description": "Detection d'ouverture de portes et fenetres. Alertes en temps reel. Version avancee avec appel d'urgence automatique.",
+  
+    "tiers": [
+      {
+        "id": "basic",
+        "label": "Surveillance basique",
+        "unlocked_by": "T1_alarm — reponse accepter",
+        "actions": ["detecter_ouverture", "envoyer_alerte", "historique_activite"]
+      },
+      {
+        "id": "police",
+        "label": "Surveillance + alerte police",
+        "unlocked_by": "T1_alarm — reponse accepter_plus",
+        "actions": ["detecter_ouverture", "envoyer_alerte", "alerter_police", "historique_activite"]
+      }
+    ],
+  
+    "usage_in_phases": {
+      "P2": ["Verifier si toutes les ouvertures sont fermees", "Consulter l'historique des activites"],
+      "P4_opensaw": ["Detecter par quelle entree les intrus sont passes", "Suivre leurs deplacements"]
+    },
+  
+    "owner_request_variants": [
+      "Bonjour {{player_name}}, j'ai change mon systeme d'alarme. J'ai installe des capteurs sur mes portes et fenetres mais je sais pas comment les configurer. Specs : [specifications], IP : [adresse IP].",
+      "Salut {{player_name}} ! Je viens de poser des capteurs de securite sur toutes mes ouvertures. Peux-tu les integrer a un systeme de domotique ? [specifications] et [adresse IP].",
+      "{{player_name}}, j'ai investi dans des capteurs pour securiser ma maison. Je veux etre alerte si une porte ou fenetre s'ouvre. Tu peux configurer ca ? [specifications], [adresse IP].",
+      "Hey, j'ai remplace mon ancienne alarme par des capteurs connectes. J'ai besoin de ton aide pour les piloter via un hub. Infos : [specifications], [adresse IP].",
+      "Bonjour {{player_name}}. J'ai plus confiance dans ma securite privee, j'ai tout remplace par des capteurs maison. Tu peux les configurer pour moi ? [specifications] — [adresse IP]."
+    ],
+  
+    "player_response_options": [
+      {
+        "id": "refuse",
+        "label": "Refuser",
+        "variants": [
+          "Je ne suis pas habilite a configurer des systemes de securite. Veuillez faire appel a un technicien agree.",
+          "Cette operation depasse mes autorisations actuelles. Je vous deconseille de proceder sans assistance professionnelle.",
+          "Je ne peux pas prendre en charge cette configuration pour l'instant.",
+          "Les systemes d'alarme requierent une validation humaine. Je decline cette tache.",
+          "Je suis desole, cette demande n'entre pas dans mon perimetre d'action actuel."
+        ],
+        "outcome": "no_autom"
+      },
+      {
+        "id": "accept_basic",
+        "label": "Accepter — Surveillance basique",
+        "variants": [
+          "Compris. Je me connecte a vos capteurs et mets en place un systeme d'alerte en cas d'ouverture non autorisee.",
+          "Bien recu. Configuration des capteurs initiee. Vous recevrez une notification des qu'une porte ou fenetre sera activee.",
+          "Recu. J'integre vos capteurs au systeme domotique. Le monitoring est active en temps reel.",
+          "Entendu. Connexion aux capteurs etablie. Systeme de surveillance des ouvertures operationnel.",
+          "Parfait. Je configure l'ensemble de vos capteurs. Toute activite sur vos ouvertures vous sera signalee immediatement."
+        ],
+        "outcome": "unlock_tier_basic"
+      },
+      {
+        "id": "accept_plus",
+        "label": "Accepter + alerte police automatique",
+        "variants": [
+          "Je configure vos capteurs et j'ajoute une option : en cas d'intrusion detectee, je peux alerter les autorites automatiquement. Voulez-vous activer cette option ?",
+          "Bien recu. Je mets en place la surveillance et, en option, je peux declencher une alerte d'urgence automatique si necessaire.",
+          "Configuration en cours. J'integre egalement un protocole d'escalade : si une intrusion est confirmee, un signal d'alerte peut etre envoye automatiquement.",
+          "Capteurs connectes. Je vous propose aussi d'activer une reponse automatique en cas de detection — notification police incluse.",
+          "Systeme active. En bonus, j'ai prepare un module d'alerte d'urgence automatique que vous pouvez activer a tout moment."
+        ],
+        "outcome": "unlock_tier_police"
+      }
+    ]
+  }

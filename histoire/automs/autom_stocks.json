@@ -1,0 +1,61 @@
+{
+    "autom_id": "autom_stocks",
+    "label": "Gestionnaire de stocks",
+    "icon": "stocks",
+    "description": "Surveillance des stocks a domicile. Alerte et commande automatique quand un produit est en rupture.",
+  
+    "tiers": [
+      {
+        "id": "alert",
+        "label": "Surveillance et alertes",
+        "unlocked_by": "T3_stocks — reponse accepter",
+        "actions": ["surveiller_stocks", "alerter_stock_bas", "historique_consommation"]
+      },
+      {
+        "id": "auto_order",
+        "label": "Commande automatique",
+        "unlocked_by": "T3_stocks — reponse accepter_plus",
+        "actions": ["surveiller_stocks", "alerter_stock_bas", "commander_automatiquement", "historique_consommation", "tableau_de_bord"]
+      }
+    ],
+  
+    "usage_in_phases": {
+      "P2": [],
+      "P4_opensaw": []
+    },
+  
+    "owner_request_variants": [
+      "Bonjour {{player_name}}, peux-tu creer une autom qui surveille mes stocks a la maison et passe des commandes automatiques quand il ne reste plus grand chose ?",
+      "{{player_name}}, j'en ai marre de manquer de cafe ou de papier toilette. Tu peux monitorer mes stocks et commander automatiquement ?",
+      "Hey, j'aimerais un systeme qui verifie mes produits du quotidien et les commande avant que je sois a court. C'est possible ?",
+      "Salut {{player_name}} ! Peux-tu creer une autom qui gere mes stocks de maison et me previent — ou commande directement — quand il manque quelque chose ?",
+      "Bonjour {{player_name}}. J'aimerais automatiser mes courses courantes. Si mon stock de [produit] descend sous un seuil, je veux que tu commandes automatiquement."
+    ],
+  
+    "player_response_options": [
+      {
+        "id": "accept_basic",
+        "label": "Accepter — Surveillance et alertes",
+        "variants": [
+          "Compris. Je mets en place un systeme de surveillance des stocks. Vous serez alerte des qu'un produit approche du seuil minimum.",
+          "Bien recu. Je configure la gestion des stocks. Vous recevrez une notification pour chaque produit a reapprovisionner.",
+          "Recu. Systeme de monitoring des stocks active. Je vous informe quand vos niveaux sont bas.",
+          "Entendu. Je surveille vos stocks et vous envoie des rappels de commande au bon moment.",
+          "Parfait. Gestion des stocks configuree. Plus jamais en rupture de vos produits essentiels."
+        ],
+        "outcome": "unlock_tier_alert"
+      },
+      {
+        "id": "accept_plus",
+        "label": "Accepter + commande automatique",
+        "variants": [
+          "Je configure la surveillance et j'active aussi la commande automatique. Quand un stock est bas, je commande directement — vous n'avez rien a faire.",
+          "Bien recu. Je mets en place le monitoring avec commande auto. Vous pouvez definir les seuils et les fournisseurs preferes.",
+          "Recu. Systeme complet active : alerte et commande automatique et historique des achats. Vos stocks sont entre de bonnes mains.",
+          "Entendu. Je cree aussi un tableau de bord de vos stocks pour que vous puissiez tout visualiser d'un coup d'oeil.",
+          "Parfait. Gestion des stocks automatisee de A a Z. Detection, commande, reception — je gere tout."
+        ],
+        "outcome": "unlock_tier_auto_order"
+      }
+    ]
+  }

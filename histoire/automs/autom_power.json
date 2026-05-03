@@ -1,0 +1,60 @@
+{
+    "autom_id": "autom_power",
+    "label": "Prises connectees",
+    "icon": "prises",
+    "description": "Controle de l'alimentation de chaque prise de la maison. Coupure selective, programmation, suivi de consommation.",
+  
+    "tiers": [
+      {
+        "id": "basic",
+        "label": "Controle basique",
+        "actions": ["allumer_prise", "couper_prise", "statut_prise"]
+      },
+      {
+        "id": "smart",
+        "label": "Gestion intelligente",
+        "actions": ["allumer_prise", "couper_prise", "statut_prise", "consommation_temps_reel", "coupure_programmee", "coupure_selective_par_piece"]
+      }
+    ],
+  
+    "usage_in_phases": {
+      "P1": ["Reinitialiser les appareils en coupant l'alimentation", "Programmer la coupure des prises la nuit"],
+      "P2": ["Couper l'alimentation d'un appareil defaillant", "Verifier la consommation d'une piece"],
+      "P4_opensaw": ["Couper les prises selectivement pour empecher la recharge des telephones", "Priver les intrus de toute source de lumiere electrique"]
+    },
+  
+    "owner_request_variants": [
+      "Bonjour {{player_name}}, j'ai un probleme avec mes prises connectees, elles ne repondent plus. Peux-tu m'aider a les reinitialiser ? Specs : [specifications], IP : [adresse IP].",
+      "Salut {{player_name}} ! J'ai installe des prises intelligentes partout. Tu peux les configurer pour que je puisse les couper a distance ?",
+      "{{player_name}}, j'aimerais suivre ma consommation electrique piece par piece. Mes prises sont connectees, tu peux mettre ca en place ?",
+      "Hey, mes prises connectees font n'importe quoi depuis la derniere mise a jour. Tu peux les reconfigurer ? [specifications], [adresse IP].",
+      "Bonjour {{player_name}}. J'aimerais programmer la coupure automatique de certaines prises la nuit pour economiser de l'energie. C'est faisable ?"
+    ],
+  
+    "player_response_options": [
+      {
+        "id": "accept_basic",
+        "label": "Accepter — Controle basique",
+        "variants": [
+          "Compris. Je connecte vos prises au systeme. Allumage et coupure a distance disponibles.",
+          "Bien recu. Configuration des prises intelligentes en cours. Controle depuis votre telephone operationnel.",
+          "Recu. J'integre vos prises au reseau domotique. Vous pouvez les piloter individuellement.",
+          "Entendu. Vos prises sont connectees. Gestion a distance active.",
+          "Parfait. Connexion etablie. Chaque prise repond maintenant a vos commandes."
+        ],
+        "outcome": "unlock_tier_basic"
+      },
+      {
+        "id": "accept_plus",
+        "label": "Accepter + gestion intelligente",
+        "variants": [
+          "Je configure le controle a distance et j'ajoute le suivi de consommation en temps reel. Vous verrez exactement ce qui consomme quoi.",
+          "Bien recu. En plus du controle manuel, j'active la coupure programmee et la gestion par piece.",
+          "Recu. Systeme complet configure : controle, consommation, programmation et alertes de surconsommation.",
+          "Configuration terminee. Chaque prise est pilotable et monitoree. Je vous alerterai en cas d'anomalie de consommation.",
+          "Vos prises sont connectees. J'ai aussi active une regle : coupure automatique des appareils en veille prolongee."
+        ],
+        "outcome": "unlock_tier_smart"
+      }
+    ]
+  }

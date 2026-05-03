@@ -13,8 +13,12 @@ FetchContent_Declare(
   GIT_TAG v6.1.9
   EXCLUDE_FROM_ALL
 )
-FetchContent_MakeAvailable(ftxui)
 
+FetchContent_Declare(
+  nlohmann_json
+  GIT_REPOSITORY https://github.com/nlohmann/json
+  GIT_TAG        v3.11.3
+)
 
 add_executable(bonhomme-heureux 
   src/main.cpp 
@@ -26,11 +30,20 @@ add_executable(bonhomme-heureux
   src/UI_modules/theme.cpp
   src/tests/exemples.hpp
   src/tests/exemples.cpp
+  src/game_engine.hpp
+  src/game_engine.cpp
+  src/game_renderer.hpp
+  src/game_renderer.cpp
 )
+
+FetchContent_MakeAvailable(ftxui nlohmann_json)
+
+target_include_directories(bonhomme-heureux PRIVATE src)
 
 target_link_libraries(bonhomme-heureux
   PRIVATE
     ftxui::component
     ftxui::dom
     ftxui::screen
+    nlohmann_json::nlohmann_json
 )
