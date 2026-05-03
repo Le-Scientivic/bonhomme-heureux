@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 
 #include <ftxui/component/component.hpp>
@@ -11,11 +12,11 @@
 
 class InterfaceGraphique {
 public:
-    void ajouter_module(Module module);
+    void ajouter_module(std::shared_ptr<Module> module);
     void afficher_rendu();
 
 public:
-    std::vector<Module> _liste_de_modules = {};
+    std::vector<std::shared_ptr<Module>> _liste_de_modules = {};
 
     ftxui::ScreenInteractive _screen = ftxui::ScreenInteractive::Fullscreen();
 };

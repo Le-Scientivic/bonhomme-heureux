@@ -2,10 +2,8 @@
 
 using namespace ftxui;
 
-ModuleDeCommande::ModuleDeCommande(Element contenu) {
-    _contenu = contenu;
-}
+ModuleDeCommande::ModuleDeCommande() = default;
 
-void ModuleDeCommande::changer_contenu(ftxui::Element nouveau_contenu) {
-    _contenu = nouveau_contenu;
+Element ModuleDeCommande::Render() const {
+    return encadrer_avec_titre("Commande", text("Aucun contenu"));
 }

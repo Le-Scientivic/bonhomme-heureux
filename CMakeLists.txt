@@ -30,6 +30,10 @@ add_executable(bonhomme-heureux
   src/UI_modules/module_de_commande.cpp
   src/UI_modules/theme.hpp
   src/UI_modules/theme.cpp
+  src/UI_modules/module_de_discussion.hpp
+  src/UI_modules/module_de_discussion.cpp
+  src/UI_modules/module_automatisation.hpp
+  src/UI_modules/module_automatisation.cpp
   src/tests/exemples.hpp
   src/tests/exemples.cpp
   src/game_engine.hpp

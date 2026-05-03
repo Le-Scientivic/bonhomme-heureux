@@ -1,18 +1,13 @@
 #pragma once
 
 #include <ftxui/dom/elements.hpp>
-#include <string>
-
 #include <ftxui/component/component.hpp>
 
 #include "module.hpp"
 
-class ModuleDeCommande : Module {
+class ModuleDeCommande : public Module {
 public:
-    ModuleDeCommande (ftxui::Element contenu);
+    ModuleDeCommande();
 
-    void changer_contenu(ftxui::Element nouveau_contenu);
-
-private:
-    ftxui::Element _contenu;
+    ftxui::Element Render() const override;
 };
