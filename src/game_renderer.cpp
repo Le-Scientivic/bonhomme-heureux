@@ -1,5 +1,4 @@
 #include "game_renderer.hpp"
-#include "UI_modules/input.hpp"
 
 #include <iostream>
 #include <chrono>
@@ -229,7 +228,7 @@ int show_choice_menu(const std::vector<GameChoice>& choices) {
     return selected;
 }
 
-std::string show_input(const std::string& prompt) {
+/*std::string show_input(const std::string& prompt) {
     InputModule input(prompt, " > ");
     input.set_placeholder("Tapez votre message...");
 
@@ -266,7 +265,7 @@ std::string show_input(const std::string& prompt) {
     screen.Loop(renderer);
 
     return result;
-}
+}*/
 
 void show_message(const std::string& speaker, const std::string& message) {
     std::cout << "\n  " << speaker << ": ";

@@ -24,8 +24,10 @@ add_executable(bonhomme-heureux
   src/main.cpp 
   src/interface_graphique.hpp 
   src/interface_graphique.cpp 
-  src/UI_modules/input.hpp 
-  src/UI_modules/input.cpp
+  src/UI_modules/module.hpp
+  src/UI_modules/module.cpp
+  src/UI_modules/module_de_commande.hpp 
+  src/UI_modules/module_de_commande.cpp
   src/UI_modules/theme.hpp
   src/UI_modules/theme.cpp
   src/tests/exemples.hpp

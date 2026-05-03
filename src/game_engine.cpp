@@ -11,7 +11,7 @@
 using json = nlohmann::json;
 
 static std::string read_file_content(const std::string& filepath) {
-    std::ifstream file("../../../" + filepath);
+    std::ifstream file("../../" + filepath);
     if (!file.is_open()) {
         throw std::runtime_error("Cannot open file: " + filepath);
     }
