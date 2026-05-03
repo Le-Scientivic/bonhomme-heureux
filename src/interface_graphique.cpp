@@ -1,41 +1,25 @@
 #include "interface_graphique.hpp"
-
-#include <ftxui/component/component.hpp>
-#include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 
 using namespace ftxui;
 
-std::bitset<MODULE_BIT_COUNT> uiModules;
-
-void init_modules(){
-    uiModules.set(INPUT);
-    uiModules.reset(CHAT);
-    uiModules.reset(AUTOMATIONS);
-    uiModules.reset(VIDEO);
+void InterfaceGraphique::ajouter_module(Module module) {
+  _liste_de_modules.push_back(module);
 }
+    
+void InterfaceGraphique::afficher_rendu() {
+  std::vector<Element> éléments_visibles;
+  for (const auto& module : _liste_de_modules) {
+    if (module.estVisible()) {
+      éléments_visibles.push_back(module);
+    }
+  }
 
-void display_modules() {
-    bool isInputEnabled = uiModules.test(INPUT);
-
-    // Créer une instance du module input
-    InputModule input_module("Vous: ", " > ");
-    input_module.set_placeholder("Tapez votre message...");
-
-    // Créer le composant input rendu
-    auto input_component = input_module.render();
-
-    // Créer le layout principal avec le module input
-    auto main_layout = Renderer(input_component, [&] {
-        return vbox({
-            text("Bienvenue dans l'interface modulaire") | bold | center,
-            separator(),
-            text("Module INPUT activé") | center,
-            separator(),
-            input_component->Render(),
-        }) | border;
-    });
-
-    auto screen = ScreenInteractive::TerminalOutput();
-    screen.Loop(main_layout);
+  auto rendu = Renderer([&] {
+    if (éléments_visibles.empty()) {
+      return text("Aucun module d'affiché: appelez la fonction afficher d'un module pour mettre estVisible à True");
+    }
+    return vbox(éléments_visibles);
+  });
+  _screen.Loop(rendu);
 }

@@ -1,19 +1,21 @@
 #pragma once
 
-#include <bitset>
+#include <vector>
 
-#include "UI_modules/input.hpp"
+#include <ftxui/component/component.hpp>
+#include <ftxui/component/screen_interactive.hpp>
 
-// modules de l'ui à activer/désactiver
-enum ModuleIndex {
-    INPUT,
-    CHAT,
-    AUTOMATIONS,
-    VIDEO,
-    MODULE_BIT_COUNT
+#include "UI_modules/module.hpp"
+
+//#include "UI_modules/input.hpp"
+
+class InterfaceGraphique {
+public:
+    void ajouter_module(Module module);
+    void afficher_rendu();
+
+public:
+    std::vector<Module> _liste_de_modules = {};
+
+    ftxui::ScreenInteractive _screen = ftxui::ScreenInteractive::Fullscreen();
 };
-// contient l'état d'activation des modules de l'UI
-extern std::bitset<MODULE_BIT_COUNT> uiModules;
-
-void init_modules();
-void display_modules();
