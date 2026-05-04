@@ -20,6 +20,8 @@ struct GameChoice {
     std::string id;
     /// Libelle affiche au joueur.
     std::string label;
+    /// Variantes de reponse affichees dans la discussion (optionnel).
+    std::vector<std::string> response_variants;
     /// Phase de destination si ce choix est valide.
     std::string next_phase;
     /// Tache suivante associee a ce choix, quand applicable.

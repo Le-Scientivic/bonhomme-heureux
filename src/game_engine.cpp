@@ -15,14 +15,25 @@ using json = nlohmann::json;
 static std::string resolve_asset_path(const std::string& filepath) {
     namespace fs = std::filesystem;
 
-    fs::path current = fs::current_path();
-    for (int depth = 0; depth < 6 && !current.empty(); ++depth) {
-        const fs::path candidate = current / filepath;
-        if (fs::exists(candidate)) {
-            return candidate.string();
-        }
+    std::vector<fs::path> roots;
+    roots.push_back(fs::current_path());
 
-        current = current.parent_path();
+    std::error_code ec;
+    fs::path exe_path = fs::read_symlink("/proc/self/exe", ec);
+    if (!ec && !exe_path.empty()) {
+        roots.push_back(exe_path.parent_path());
+    }
+
+    for (const auto& root : roots) {
+        fs::path current = root;
+        for (int depth = 0; depth < 8 && !current.empty(); ++depth) {
+            const fs::path candidate = current / filepath;
+            if (fs::exists(candidate)) {
+                return candidate.string();
+            }
+
+            current = current.parent_path();
+        }
     }
 
     return filepath;
@@ -30,9 +41,10 @@ static std::string resolve_asset_path(const std::string& filepath) {
 
 /// Lit integralement un fichier texte a partir d'un chemin d'asset resolve.
 static std::string read_file_content(const std::string& filepath) {
-    std::ifstream file(resolve_asset_path(filepath));
+    const std::string resolved = resolve_asset_path(filepath);
+    std::ifstream file(resolved);
     if (!file.is_open()) {
-        throw std::runtime_error("Cannot open file: " + filepath);
+        throw std::runtime_error("Cannot open file: " + resolved);
     }
 
     std::stringstream buffer;
@@ -147,10 +159,7 @@ GamePhase load_phase(const std::string& phase_id, const GameMeta& meta) {
             choice.next_phase = option.value("next_phase", "");
 
             if (option.contains("variants")) {
-                std::vector<std::string> variants = read_string_array(option, "variants", meta);
-                if (!variants.empty()) {
-                    choice.label = pick_text(variants);
-                }
+                choice.response_variants = read_string_array(option, "variants", meta);
             }
 
             phase.player_choice_on_start.options.push_back(choice);

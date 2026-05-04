@@ -9,33 +9,70 @@
 #include "module.hpp"
 #include "../game_engine.hpp"
 
-/// Module de selection des automations debloquees par le joueur.
+/**
+ * @file module_automatisation.hpp
+ * @brief Module de selection et navigation des automations debloquees.
+ */
 class ModuleDeAutomatisation : public Module {
 public:
-	/// Construit le module de selection des automations.
+	/**
+	 * @brief Constructeur: initialise un menu vide.
+	 */
 	ModuleDeAutomatisation();
 
-	/// Prepare la liste d'automations affichables a partir des debloquages courants.
+	/**
+	 * @brief Prepare la liste d'automations affichables a partir des debloquages courants.
+	 * @param unlocked_automs Identifiants d'automs debloquees
+	 * @param meta Metadonnees du jeu utilisées pour resoudre les labels
+	 */
 	void preparer_menu_depuis_unlocked(const std::vector<std::string>& unlocked_automs, const GameMeta& meta);
-	/// Reinitialise le menu et efface la selection courante.
+
+	/**
+	 * @brief Reinitialise le menu et efface la selection courante.
+	 */
 	void reinitialiser_menu();
 
-	/// Indique si aucune automation n'est disponible.
+	/**
+	 * @brief Indique si aucune automation n'est disponible.
+	 * @return true si le menu est vide
+	 */
 	bool est_menu_vide() const;
-	/// Deplace la selection d'un cran vers le haut.
+
+	/**
+	 * @brief Deplace la selection d'un cran vers le haut.
+	 * @return true si la selection a change
+	 */
 	bool deplacer_selection_haut();
-	/// Deplace la selection d'un cran vers le bas.
+
+	/**
+	 * @brief Deplace la selection d'un cran vers le bas.
+	 * @return true si la selection a change
+	 */
 	bool deplacer_selection_bas();
-	/// Retourne l'index actuellement selectionne.
+
+	/**
+	 * @brief Retourne l'index actuellement selectionne.
+	 */
 	int index_selection() const;
-	/// Retourne l'identifiant de l'automation selectionnee.
+
+	/**
+	 * @brief Retourne l'identifiant de l'automation selectionnee.
+	 */
 	std::string id_selection() const;
-	/// Retourne le libelle de l'automation selectionnee.
+
+	/**
+	 * @brief Retourne le libelle de l'automation selectionnee.
+	 */
 	std::string label_selection() const;
-	/// Retourne les libelles actuellement presents dans le menu.
+
+	/**
+	 * @brief Retourne les libelles actuellement presents dans le menu.
+	 */
 	std::vector<std::string> labels_courants() const;
 
-	/// Produit le rendu FTXUI du module.
+	/**
+	 * @brief Produit le rendu FTXUI du module.
+	 */
 	ftxui::Element Render() const override;
 
 private:

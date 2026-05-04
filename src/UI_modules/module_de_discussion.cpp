@@ -16,7 +16,7 @@ void ModuleDeDiscussion::réinitialiser_discussion() {
     _messages.clear();
 }
 
-Element ModuleDeDiscussion::Render() const {
+Element ModuleDeDiscussion::RenderMessages() const {
     std::vector<Element> lignes;
     lignes.reserve(_messages.size());
 
@@ -37,5 +37,31 @@ Element ModuleDeDiscussion::Render() const {
         lignes.push_back(paragraph("Aucun message pour le moment"));
     }
 
-    return encadrer_avec_titre("Discussion", vbox(std::move(lignes)));
+    return vbox(std::move(lignes));
+}
+
+Element ModuleDeDiscussion::Render() const {
+    auto corps = vbox({
+        RenderMessages(),
+        separator(),
+        text(_slider_label + ": " + std::to_string(_slider_value)) | dim,
+    });
+
+    return encadrer_avec_titre("Discussion", std::move(corps));
+}
+
+Component ModuleDeDiscussion::MakeComponent(InterfaceGraphique& interface_graphique) {
+    (void)interface_graphique;
+
+    auto slider = Slider(&_slider_label, &_slider_value, _slider_min, _slider_max, 1);
+
+    return Renderer(slider, [&] {
+        auto corps = vbox({
+            RenderMessages(),
+            separator(),
+            slider->Render(),
+        });
+
+        return encadrer_avec_titre("Discussion", std::move(corps));
+    });
 }

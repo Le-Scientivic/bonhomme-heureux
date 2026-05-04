@@ -105,7 +105,7 @@ Element ModuleDeAutomatisation::Render() const {
         return encadrer_avec_titre("Automatisation", vbox(std::move(lignes)));
     }
 
-    lignes.push_back(text("Automations actives") | bold);
+    lignes.push_back(text("Automatisations activées") | bold);
     lignes.push_back(separator());
 
     for (int i = 0; i < (int)_automs_courantes.size(); ++i) {

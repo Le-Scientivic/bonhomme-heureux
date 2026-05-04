@@ -8,24 +8,51 @@
 
 #include "module.hpp"
 
-/// Module qui gere l'affichage de la discussion entre le joueur et l'autre partie.
+/**
+ * @file module_de_discussion.hpp
+ * @brief Module d'affichage et d'historique de la discussion entre joueur et interlocuteur.
+ */
 class ModuleDeDiscussion : public Module {
 public:
-    /// Construit le module de discussion avec un historique vide.
+    /**
+     * @brief Constructeur: initialise un historique vide.
+     */
     ModuleDeDiscussion();
 
-    /// Ajoute un message emis par le joueur.
+    /**
+     * @brief Ajoute un message emis par le joueur dans l'historique.
+     * @param mon_nom Nom du joueur
+     * @param mon_message Contenu du message
+     */
     void ajoute_mon_message(const std::string& mon_nom, const std::string& mon_message);
-    /// Ajoute un message emis par l'interlocuteur.
+
+    /**
+     * @brief Ajoute un message emis par l'interlocuteur.
+     * @param son_nom Nom de l'interlocuteur
+     * @param son_message Contenu du message
+     */
     void ajoute_son_message(const std::string& son_nom, const std::string& son_message);
-	/// Reinitialise completement l'historique de discussion.
+
+    /**
+     * @brief Reinitialise completement l'historique de discussion.
+     */
     void réinitialiser_discussion();
 
-    /// Produit le rendu FTXUI de la conversation.
+    /**
+     * @brief Rendement FTXUI du module de conversation.
+     * @return Element representant la vue conversation
+     */
     ftxui::Element Render() const override;
 
+    /**
+     * @brief Construit le composant interactif (slider).
+     */
+    ftxui::Component MakeComponent(InterfaceGraphique& interface_graphique) override;
+
 private:
-    /// Representation interne d'un message de discussion.
+    /**
+     * @brief Representation interne d'un message de discussion.
+     */
     struct Message {
         /// Nom de l'emetteur.
         std::string nom;
@@ -37,4 +64,12 @@ private:
 
     /// Historique ordonne des messages de discussion.
     std::vector<Message> _messages;
+
+    /// Etat du slider d'option d'affichage.
+    int _slider_value = 50;
+    int _slider_min = 0;
+    int _slider_max = 100;
+    std::string _slider_label = "Zoom discussion";
+
+    ftxui::Element RenderMessages() const;
 };

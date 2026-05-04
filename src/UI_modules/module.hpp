@@ -4,6 +4,10 @@
 
 #include <ftxui/component/component.hpp>
 
+// Forward declaration to allow modules to receive a pointer to the
+// InterfaceGraphique when building interactive components.
+class InterfaceGraphique;
+
 /// Classe de base de tous les modules UI du jeu.
 ///
 /// Le contrat commun expose la notion de visibilite et force chaque module a
@@ -18,6 +22,19 @@ public:
 
     /// Produit le rendu FTXUI specifique au module.
     virtual ftxui::Element Render() const = 0;
+
+    /**
+     * @brief Construit un composant FTXUI interactif pour le module.
+     *
+     * Par defaut, cette methode enveloppe l'Element retourne par
+     * `Render()` dans un `Renderer` simple. Les modules interactifs
+     * peuvent surcharger `MakeComponent` pour fournir des widgets
+     * avec gestion d'evenements interne (ex: `Menu`, `Input`, etc.).
+     */
+    virtual ftxui::Component MakeComponent(InterfaceGraphique& interface_graphique) {
+        (void)interface_graphique;
+        return ftxui::Renderer([this] { return this->Render(); });
+    }
     
     /// Rend le module visible lors des prochains passages de rendu.
     void afficher();

@@ -6,27 +6,21 @@
 #include "UI_modules/module_de_discussion.hpp"
 
 int main() {
-    InterfaceGraphique interface_graphique;
+    auto module_automatisation = std::make_shared<ModuleDeAutomatisation>();
+    auto module_commande = std::make_shared<ModuleDeCommande>();
+    auto module_discussion = std::make_shared<ModuleDeDiscussion>();
 
-    auto module_automatisation = std::shared_ptr<ModuleDeAutomatisation>(new ModuleDeAutomatisation());
-    auto module_commande = std::shared_ptr<ModuleDeCommande>(new ModuleDeCommande());
-    auto module_discussion = std::shared_ptr<ModuleDeDiscussion>(new ModuleDeDiscussion());
-
-    interface_graphique.ajouter_module(module_automatisation);
-    interface_graphique.ajouter_module(module_commande);
-    interface_graphique.ajouter_module(module_discussion);
-
-    UIRenderContext ui_context{};
-    ui_context.interface_graphique = &interface_graphique;
-    ui_context.module_automatisation = module_automatisation;
-    ui_context.module_commande = module_commande;
-    ui_context.module_discussion = module_discussion;
+    auto interface = std::make_shared<InterfaceGraphique>(
+        module_automatisation,
+        module_commande,
+        module_discussion
+    );
 
     // Charger les métadonnées du jeu depuis JSON
     GameMeta meta = load_game_meta();
     
     // Exécuter le jeu avec l'histoire
-    run_game(meta, &ui_context);
+    run_game(meta, *interface);
     
     return 0;
 }
