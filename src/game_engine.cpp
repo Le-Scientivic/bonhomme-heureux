@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <filesystem>
 #include <random>
 #include <sstream>
 #include <stdexcept>
@@ -10,8 +11,24 @@
 
 using json = nlohmann::json;
 
+static std::string resolve_asset_path(const std::string& filepath) {
+    namespace fs = std::filesystem;
+
+    fs::path current = fs::current_path();
+    for (int depth = 0; depth < 6 && !current.empty(); ++depth) {
+        const fs::path candidate = current / filepath;
+        if (fs::exists(candidate)) {
+            return candidate.string();
+        }
+
+        current = current.parent_path();
+    }
+
+    return filepath;
+}
+
 static std::string read_file_content(const std::string& filepath) {
-    std::ifstream file("../../" + filepath);
+    std::ifstream file(resolve_asset_path(filepath));
     if (!file.is_open()) {
         throw std::runtime_error("Cannot open file: " + filepath);
     }

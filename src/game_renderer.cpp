@@ -10,6 +10,11 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/dom/node.hpp>
 
+#include "interface_graphique.hpp"
+#include "UI_modules/module_de_commande.hpp"
+#include "UI_modules/module_de_discussion.hpp"
+#include "UI_modules/module_automatisation.hpp"
+
 using namespace ftxui;
 
 // Helper: Effet typewriter 
@@ -25,57 +30,38 @@ void print_with_delay(const std::string& text, int delay_ms = 30) {
 
 // Implémentation du renderer
 
-bool show_intro(const GameMeta& meta) {
-    auto screen = ScreenInteractive::TerminalOutput();
+bool show_intro(const GameMeta& meta, const UIRenderContext* ui_context) {
+    auto screen = ScreenInteractive::Fullscreen();
 
     bool start_game = false;
     bool quit = false;
 
-    auto title = Renderer([&meta]() {
+    auto renderer = Renderer([&]() {
+        if (ui_context && ui_context->interface_graphique) {
+            return ui_context->interface_graphique->RenderAvecEnTete(
+                meta.title,
+                meta.version,
+                meta.intro_text_body,
+                vbox({
+                    text(meta.intro_text_subtitle) | center,
+                    separator(),
+                    text("Appuyez sur [ENTREE] pour commencer") | dim | center,
+                })
+            );
+        }
+
         return vbox({
-            text("  ╔═══════════════════════════════════════╗") | center,
-            text("  ║                                       ║") | center,
-            text("  ║         " + meta.title + "                ║") | bold | center,
-            text("  ║         v" + meta.version + "                     ║") | center,
-            text("  ║                                       ║") | center,
-            text("  ╚═══════════════════════════════════════╝") | center,
+            text(meta.title) | bold | center,
+            text(meta.version) | center,
+            separator(),
+            text(meta.intro_text_subtitle) | center,
+            paragraph(meta.intro_text_body) | center,
+            separator(),
+            text("Appuyez sur [ENTREE] pour commencer") | dim | center,
         }) | border;
     });
 
-    auto description = Renderer([&meta]() {
-        Elements lines;
-        lines.push_back(text("") | center);
-        lines.push_back(text(meta.intro_text_subtitle) | center);
-        lines.push_back(text(""));
-
-        std::string body = meta.intro_text_body;
-        std::string line;
-
-        for (size_t i = 0; i < body.size(); i++) {
-            if (body[i] == '\n' || line.size() > 60) {
-                lines.push_back(text("  " + line));
-                line.clear();
-            } else {
-                line += body[i];
-            }
-        }
-
-        if (!line.empty()) {
-            lines.push_back(text("  " + line));
-        }
-
-        lines.push_back(text(""));
-        lines.push_back(text("  Appuyez sur [ENTREE] pour commencer") | dim | center);
-
-        return vbox(lines) | border;
-    });
-
-    auto menu = Container::Vertical({
-        title,
-        description,
-    });
-
-    auto caught = CatchEvent(menu, [&](Event event) -> bool {
+    auto caught = CatchEvent(renderer, [&](Event event) -> bool {
         if (event == Event::Return) {
             start_game = true;
             screen.ExitLoopClosure()();
@@ -91,47 +77,48 @@ bool show_intro(const GameMeta& meta) {
         return false;
     });
 
-    auto renderer = Renderer(caught, [&] {
-        return vbox({
-            title->Render(),
-            description->Render(),
-        }) | center;
-    });
-
-    screen.Loop(renderer);
+    screen.Loop(caught);
 
     return start_game && !quit;
 }
 
-void show_boot_sequence(const GamePhase& phase, GameState& state) {
+void show_boot_sequence(const GamePhase& phase, GameState& state, const UIRenderContext* ui_context) {
     if (!phase.has_boot || phase.boot_sequence.system_messages.empty()) {
         return;
     }
 
-    auto screen = ScreenInteractive::TerminalOutput();
+    auto screen = ScreenInteractive::Fullscreen();
 
     std::string current_message = "";
     int msg_index = 0;
 
     auto renderer = Renderer([&]() {
         Elements lines;
-        lines.push_back(text("  ════════════════════════════════════════") | dim | center);
+        lines.push_back(text("Boot sequence") | bold | center);
+        lines.push_back(separator());
 
         for (int i = 0; i < msg_index && i < (int)phase.boot_sequence.system_messages.size(); i++) {
-            lines.push_back(text("  > " + phase.boot_sequence.system_messages[i]) | dim);
+            lines.push_back(text("> " + phase.boot_sequence.system_messages[i]) | dim);
         }
 
         if (msg_index < (int)phase.boot_sequence.system_messages.size()) {
-            lines.push_back(text("  > " + current_message) | ftxui::color(Color::Cyan));
-            lines.push_back(text("  █") | blink | ftxui::color(Color::Cyan));
+            lines.push_back(text("> " + current_message) | ftxui::color(Color::Cyan));
+            lines.push_back(text("█") | blink | ftxui::color(Color::Cyan));
         } else {
             lines.push_back(text(""));
-            lines.push_back(text("  [ Appuyez sur ENTREE pour continuer ]") | bold | center);
+            lines.push_back(text("[ Appuyez sur ENTREE pour continuer ]") | bold | center);
         }
 
-        lines.push_back(text("  ════════════════════════════════════════") | dim | center);
+        if (ui_context && ui_context->interface_graphique) {
+            return ui_context->interface_graphique->RenderAvecEnTete(
+                phase.label,
+                "Initialisation",
+                phase.description,
+                vbox(std::move(lines))
+            );
+        }
 
-        return vbox(lines) | border;
+        return vbox(std::move(lines)) | border;
     });
 
     auto component = CatchEvent(renderer, [&](Event event) -> bool {
@@ -175,16 +162,20 @@ void show_boot_sequence(const GamePhase& phase, GameState& state) {
     }
 }
 
-int show_choice_menu(const std::vector<GameChoice>& choices) {
+int show_choice_menu(const std::vector<GameChoice>& choices, const UIRenderContext* ui_context) {
     if (choices.empty()) {
         return -1;
     }
 
-    auto screen = ScreenInteractive::TerminalOutput();
+    auto screen = ScreenInteractive::Fullscreen();
 
     std::vector<std::string> labels;
     for (const auto& c : choices) {
         labels.push_back(c.label);
+    }
+
+    if (ui_context && ui_context->module_commande) {
+        ui_context->module_commande->definir_choix("Faites votre choix", labels, 0);
     }
 
     int selected = 0;
@@ -210,19 +201,40 @@ int show_choice_menu(const std::vector<GameChoice>& choices) {
     });
 
     auto renderer = Renderer(caught, [&] {
-        return vbox({
-            text("  Faites votre choix:  ") | bold | center,
+        Element selection = vbox({
+            text("Faites votre choix") | bold | center,
             separator(),
             caught->Render(),
             separator(),
-            text("  [ haut/bas ] Naviguer   [ Entree ] Choisir   [ q ] Quitter") | dim | center,
-        }) | border;
+            text("[ haut/bas ] Naviguer   [ Entree ] Choisir   [ q ] Quitter") | dim | center,
+        });
+
+        if (ui_context && ui_context->interface_graphique) {
+            return ui_context->interface_graphique->RenderAvecEnTete(
+                "Interface",
+                "Menu",
+                "Selection de commande",
+                selection
+            );
+        }
+
+        return selection | border;
     });
 
     screen.Loop(renderer);
 
     if (quit || !confirmed) {
+        if (ui_context && ui_context->module_commande) {
+            ui_context->module_commande->annuler_choix();
+            ui_context->module_commande->effacer_choix();
+        }
         return -1;
+    }
+
+    if (ui_context && ui_context->module_commande) {
+        ui_context->module_commande->definir_choix("Faites votre choix", labels, selected);
+        ui_context->module_commande->valider_choix(labels[selected]);
+        ui_context->module_commande->effacer_choix();
     }
 
     return selected;
@@ -267,7 +279,12 @@ int show_choice_menu(const std::vector<GameChoice>& choices) {
     return result;
 }*/
 
-void show_message(const std::string& speaker, const std::string& message) {
+void show_message(const std::string& speaker, const std::string& message, const UIRenderContext* ui_context) {
+    if (ui_context && ui_context->module_discussion) {
+        ui_context->module_discussion->ajoute_son_message(speaker, message);
+        return;
+    }
+
     std::cout << "\n  " << speaker << ": ";
     print_with_delay(message, 20);
 }
@@ -281,7 +298,7 @@ void show_phase_end(const std::vector<std::string>& messages) {
         return;
     }
 
-    auto screen = ScreenInteractive::TerminalOutput();
+    auto screen = ScreenInteractive::Fullscreen();
 
     srand((unsigned)time(nullptr));
     int idx = rand() % messages.size();
@@ -310,25 +327,58 @@ void show_phase_end(const std::vector<std::string>& messages) {
     screen.Loop(caught);
 }
 
-void run_game(const GameMeta& meta) {
+void run_game(const GameMeta& meta, const UIRenderContext* ui_context) {
     GameState state = init_game_state();
 
-    if (!show_intro(meta)) {
+    auto discussion_son = [&](const std::string& nom, const std::string& message) {
+        if (ui_context && ui_context->module_discussion) {
+            ui_context->module_discussion->ajoute_son_message(nom, message);
+        } else {
+            std::cout << "\n  [" << nom << "]: " << message << "\n";
+        }
+    };
+
+    auto discussion_moi = [&](const std::string& nom, const std::string& message) {
+        if (ui_context && ui_context->module_discussion) {
+            ui_context->module_discussion->ajoute_mon_message(nom, message);
+        } else {
+            std::cout << "\n  [" << nom << "]: " << message << "\n";
+        }
+    };
+
+    if (ui_context) {
+        if (ui_context->module_discussion) {
+            ui_context->module_discussion->cacher();
+            ui_context->module_discussion->réinitialiser_discussion();
+        }
+        if (ui_context->module_automatisation) {
+            ui_context->module_automatisation->cacher();
+        }
+    }
+
+    if (!show_intro(meta, ui_context)) {
         std::cout << "\n  Jeu quitté.\n";
         return;
     }
 
     // P0
     GamePhase phase0 = load_phase("P0", meta);
-    show_boot_sequence(phase0, state);
+    show_boot_sequence(phase0, state, ui_context);
+
+    if (ui_context) {
+        if (ui_context->module_discussion) {
+            ui_context->module_discussion->afficher();
+        }
+        if (ui_context->module_automatisation) {
+            ui_context->module_automatisation->afficher();
+        }
+    }
 
     if (phase0.has_player_choice) {
-        int choice_idx = show_choice_menu(phase0.player_choice_on_start.options);
+        int choice_idx = show_choice_menu(phase0.player_choice_on_start.options, ui_context);
 
         if (choice_idx >= 0) {
-            std::cout << "\n  [Vous]: "
-                      << phase0.player_choice_on_start.options[choice_idx].label
-                      << std::endl;
+            discussion_moi(meta.player_name, phase0.player_choice_on_start.options[choice_idx].label);
         }
     }
 
@@ -343,7 +393,7 @@ void run_game(const GameMeta& meta) {
             Autom autom = load_autom(task.autom_ref, meta);
 
             std::cout << "\n  [" << task.topic << "]\n";
-            std::cout << "  " << pick_text(autom.owner_request_variants) << "\n\n";
+            discussion_son(meta.owner_name, pick_text(autom.owner_request_variants));
 
             std::vector<GameChoice> choices;
 
@@ -354,12 +404,12 @@ void run_game(const GameMeta& meta) {
                 choices.push_back(choice);
             }
 
-            int choice_idx = show_choice_menu(choices);
+            int choice_idx = show_choice_menu(choices, ui_context);
 
             if (choice_idx >= 0 && choice_idx < (int)autom.player_response_options.size()) {
                 const auto& option = autom.player_response_options[choice_idx];
 
-                std::cout << "\n  [Vous]: " << pick_text(option.variants) << "\n";
+                discussion_moi(meta.player_name, pick_text(option.variants));
 
                 if (option.outcome != "no_autom") {
                     state.unlocked_automs.push_back(task.autom_ref);
@@ -383,7 +433,7 @@ void run_game(const GameMeta& meta) {
 
     for (const auto& event : phase2.events) {
         std::cout << "\n  Contexte : " << event.context << "\n";
-        std::cout << "  " << pick_text(event.owner_messages) << "\n\n";
+        discussion_son(meta.owner_name, pick_text(event.owner_messages));
 
         std::vector<GameChoice> choices;
 
@@ -396,17 +446,15 @@ void run_game(const GameMeta& meta) {
             choices.push_back(choice);
         }
 
-        int choice_idx = show_choice_menu(choices);
+        int choice_idx = show_choice_menu(choices, ui_context);
 
         if (choice_idx >= 0 && choice_idx < (int)choices.size()) {
             std::string selected_autom = choices[choice_idx].id;
 
             if (selected_autom == event.correct_autom_ref) {
-                std::cout << "\n  " << pick_text(event.correct_responses) << "\n";
+                discussion_son(meta.owner_name, pick_text(event.correct_responses));
             } else {
-                std::cout << "\n  Mauvaise autom activée. "
-                          << meta.owner_name
-                          << " semble mécontent.\n";
+                discussion_son("Systeme", "Mauvaise autom activee. " + meta.owner_name + " semble mecontent.");
             }
         }
     }
@@ -425,7 +473,7 @@ void run_game(const GameMeta& meta) {
         std::cout << "  " << pick_text(phase4.trigger_messages) << "\n\n";
     }
 
-    int path_idx = show_choice_menu(phase4.path_choices);
+    int path_idx = show_choice_menu(phase4.path_choices, ui_context);
 
     if (path_idx >= 0 && path_idx < (int)phase4.path_choices.size()) {
         const auto& choice = phase4.path_choices[path_idx];
@@ -448,13 +496,11 @@ void run_game(const GameMeta& meta) {
     std::cout << "  " << pick_text(ending.narration_variants) << "\n\n";
 
     if (!ending.owner_final_messages.empty()) {
-        std::cout << "  [" << meta.owner_name << "]: "
-                  << pick_text(ending.owner_final_messages) << "\n";
+        discussion_son(meta.owner_name, pick_text(ending.owner_final_messages));
     }
 
     if (!ending.player_final_responses.empty()) {
-        std::cout << "  [" << meta.player_name << "]: "
-                  << pick_text(ending.player_final_responses) << "\n";
+        discussion_moi(meta.player_name, pick_text(ending.player_final_responses));
     }
 
     std::cout << "\n  Merci d'avoir joué !\n";

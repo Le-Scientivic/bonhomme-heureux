@@ -34,7 +34,7 @@ Element ModuleDeDiscussion::Render() const {
     }
 
     if (lignes.empty()) {
-        lignes.push_back(text("Aucun message pour le moment"));
+        lignes.push_back(paragraph("Aucun message pour le moment"));
     }
 
     return encadrer_avec_titre("Discussion", vbox(std::move(lignes)));

@@ -10,8 +10,8 @@ using namespace ftxui;
 void InterfaceGraphique::ajouter_module(std::shared_ptr<Module> module) {
   _liste_de_modules.push_back(module);
 }
-    
-void InterfaceGraphique::afficher_rendu() {
+
+Element InterfaceGraphique::Render() const {
   std::shared_ptr<ModuleDeDiscussion> module_de_discussion;
   std::shared_ptr<ModuleDeAutomatisation> module_d_automatisation;
   std::shared_ptr<ModuleDeCommande> module_de_commande;
@@ -65,16 +65,42 @@ void InterfaceGraphique::afficher_rendu() {
 
   auto bottom_row = render_slot(module_de_commande);
 
+  return vbox({
+    top_row,
+    filler(),
+    bottom_row,
+  });
+}
+
+Element InterfaceGraphique::RenderAvecEnTete(const std::string& titre, const std::string& sous_titre, const std::string& description, const Element& corps) const {
+  std::vector<Element> lignes;
+
+  lignes.push_back(text(titre) | bold | center);
+
+  if (!sous_titre.empty()) {
+    lignes.push_back(text(sous_titre) | dim | center);
+  }
+
+  if (!description.empty()) {
+    lignes.push_back(separator());
+    lignes.push_back(paragraph(description) | center);
+  }
+
+  lignes.push_back(separator());
+  lignes.push_back(corps);
+
+  return vbox(std::move(lignes)) | border;
+}
+    
+void InterfaceGraphique::afficher_rendu() {
   auto rendu = Renderer([&] {
-    if (!module_de_discussion && !module_d_automatisation && !module_de_commande) {
+    if (std::none_of(_liste_de_modules.begin(), _liste_de_modules.end(), [](const std::shared_ptr<Module>& module) {
+          return module && module->estVisible();
+        })) {
       return text("Aucun module d'affiché: appelez la fonction afficher d'un module pour mettre estVisible à True");
     }
 
-    return vbox({
-      top_row,
-      filler(),
-      bottom_row,
-    });
+    return Render();
   });
   _screen.Loop(rendu);
 }
