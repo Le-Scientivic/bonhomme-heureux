@@ -11,6 +11,7 @@
 
 using json = nlohmann::json;
 
+/// Resout un chemin d'asset en remontant dans l'arborescence courante.
 static std::string resolve_asset_path(const std::string& filepath) {
     namespace fs = std::filesystem;
 
@@ -27,6 +28,7 @@ static std::string resolve_asset_path(const std::string& filepath) {
     return filepath;
 }
 
+/// Lit integralement un fichier texte a partir d'un chemin d'asset resolve.
 static std::string read_file_content(const std::string& filepath) {
     std::ifstream file(resolve_asset_path(filepath));
     if (!file.is_open()) {
@@ -38,6 +40,7 @@ static std::string read_file_content(const std::string& filepath) {
     return buffer.str();
 }
 
+/// Parse un fichier JSON charge depuis les assets du jeu.
 static json read_json(const std::string& filepath) {
     return json::parse(read_file_content(filepath));
 }
@@ -72,6 +75,7 @@ std::string pick_text(const std::vector<std::string>& values) {
     return values[dist(gen)];
 }
 
+/// Lit un tableau de chaines JSON et remplace les variables connues.
 static std::vector<std::string> read_string_array(const json& j, const std::string& key, const GameMeta& meta) {
     std::vector<std::string> result;
 
