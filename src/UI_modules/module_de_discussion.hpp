@@ -45,7 +45,7 @@ public:
     ftxui::Element Render() const override;
 
     /**
-     * @brief Construit le composant interactif (slider).
+     * @brief Construit le composant interactif (scrollbar).
      */
     ftxui::Component MakeComponent(InterfaceGraphique& interface_graphique) override;
 
@@ -64,12 +64,4 @@ private:
 
     /// Historique ordonne des messages de discussion.
     std::vector<Message> _messages;
-
-    /// Etat du slider d'option d'affichage.
-    int _slider_value = 50;
-    int _slider_min = 0;
-    int _slider_max = 100;
-    std::string _slider_label = "Zoom discussion";
-
-    ftxui::Element RenderMessages() const;
 };

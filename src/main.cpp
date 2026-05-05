@@ -5,7 +5,12 @@
 #include "UI_modules/module_de_commande.hpp"
 #include "UI_modules/module_de_discussion.hpp"
 
+#include "tests/exemples.hpp"
+
 int main() {
+
+    run_examples_menu();
+
     auto module_automatisation = std::make_shared<ModuleDeAutomatisation>();
     auto module_commande = std::make_shared<ModuleDeCommande>();
     auto module_discussion = std::make_shared<ModuleDeDiscussion>();

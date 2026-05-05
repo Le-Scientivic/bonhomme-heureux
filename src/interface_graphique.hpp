@@ -1,5 +1,3 @@
-#pragma once
-
 #include <functional>
 #include <memory>
 #include <string>
@@ -9,18 +7,15 @@
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 
-#include "UI_modules/module.hpp"
 #include "UI_modules/module_de_commande.hpp"
 #include "UI_modules/module_de_discussion.hpp"
 #include "UI_modules/module_automatisation.hpp"
-
-//#include "UI_modules/input.hpp"
 
 /**
  * @brief Orchestrateur de rendu FTXUI regroupant les differentes parties de l'UI.
  *
  * Cette classe centralise la composition des modules et lance la boucle
- * d'affichage interactive via FTXUI. Les modules sont possédes directement.
+ * d'affichage interactive via FTXUI. Les modules sont possedes directement.
  */
 class InterfaceGraphique {
 public:
@@ -58,6 +53,11 @@ public:
     ftxui::Element Render() const;
 
     /**
+     * @brief Construit le composant racine qui garde tous les modules sur la meme page.
+     */
+    ftxui::Component construire_racine();
+
+    /**
      * @brief Construit une vue encadree avec titre, sous-titre, description et contenu.
      * @param titre Titre principal de la vue
      * @param sous_titre Sous-titre optionnel
@@ -73,60 +73,11 @@ public:
     ) const;
 
     /**
-     * @brief Raccourci pour afficher une page (titre, sous-titre, description) sur l'ecran.
-     * @param titre Titre principal
-     * @param sous_titre Sous-titre optionnel
-     * @param description_lignes Description multi-lignes
-     * @param corps Contenu optionnel
-     * @param gestionnaire_evenement Callback optionnel pour gerer les evenements
-     */
-    void afficher_page(
-        const std::string& titre,
-        const std::string& sous_titre,
-        const std::vector<std::string>& description_lignes,
-        const ftxui::Element& corps = ftxui::filler(),
-        std::function<bool(ftxui::Event)> gestionnaire_evenement = {}
-    );
-
-    /**
-     * @brief Definir l'en-tete persistent pour le rendu compose.
-     * @param titre Titre principal
-     * @param sous_titre Sous-titre optionnel
-     * @param description_lignes Description multi-lignes
-     */
-    void definir_entete(
-        const std::string& titre,
-        const std::string& sous_titre,
-        const std::vector<std::string>& description_lignes
-    );
-
-    /**
-     * @brief Lance la boucle interactive principale de rendu.
-     *
-     * Bloque tant que l'ecran interactif n'est pas ferme par l'utilisateur.
-     */
-    void afficher_rendu(std::function<bool(ftxui::Event)> gestionnaire_evenement = {});
-
-    /**
      * @brief Lance la boucle interactive sur un composant FTXUI.
      * @param composant composant a afficher
      * @param gestionnaire_evenement callback optionnel pour traiter les evenements
      */
     void afficher_composant(ftxui::Component composant, std::function<bool(ftxui::Event)> gestionnaire_evenement = {});
-
-    /**
-     * @brief Affiche un module (avec encadrement/en-tete) sur l'ecran central.
-     * @param module Module a afficher
-     * @param titre_phase Titre a afficher en en-tete
-     * @param gestionnaire_evenement Callback optionnel pour traiter les evenements
-     */
-    void afficher_module(
-        std::shared_ptr<Module> module,
-        const std::string& titre_phase,
-        const std::string& sous_titre,
-        const std::vector<std::string>& description_lignes,
-        std::function<bool(ftxui::Event)> gestionnaire_evenement = {}
-    );
 
     /**
      * @brief Ferme la boucle interactive courante.
@@ -154,12 +105,6 @@ private:
      */
     std::shared_ptr<ModuleDeDiscussion> _module_discussion;
 
-    /// Etat d'en-tete partage pour les rendus composes.
-    std::string _entete_titre;
-    std::string _entete_sous_titre;
-    std::vector<std::string> _entete_description;
-
-private:
     /**
      * @brief Ecran FTXUI plein ecran utilise pour la boucle de rendu.
      */

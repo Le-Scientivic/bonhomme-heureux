@@ -1,6 +1,5 @@
 #include "interface_graphique.hpp"
 #include <ftxui/dom/elements.hpp>
-#include <fstream>
 
 using namespace ftxui;
 
@@ -23,33 +22,6 @@ std::shared_ptr<ModuleDeCommande> InterfaceGraphique::get_module_commande() cons
 
 std::shared_ptr<ModuleDeDiscussion> InterfaceGraphique::get_module_discussion() const {
   return _module_discussion;
-}
-
-void InterfaceGraphique::afficher_module(
-    std::shared_ptr<Module> module,
-    const std::string& titre_phase,
-    const std::string& sous_titre,
-    const std::vector<std::string>& description_lignes,
-    std::function<bool(Event)> gestionnaire_evenement
-) {
-  if (!module) return;
-
-  // Construire le composant interactif du module (les modules peuvent
-  // surcharger MakeComponent pour exposer des widgets interactifs).
-  auto module_component = module->MakeComponent(*this);
-
-  // Envelopper le rendu du module (component->Render()) dans un
-  // Renderer qui ajoute l'en-tete/encadrement via RenderAvecEnTete.
-  auto wrapped = Renderer(module_component, [&] {
-    return RenderAvecEnTete(titre_phase, sous_titre, description_lignes, module_component->Render());
-  });
-
-  // Deleguer l'affichage au chemin habituel (gestionnaire_evenement optionnel).
-  std::ofstream lg_mod("/tmp/bonhomme-debug.log", std::ios::app);
-  lg_mod << "[InterfaceGraphique] afficher_module -> afficher_composant\n";
-  lg_mod.close();
-
-  afficher_composant(wrapped, gestionnaire_evenement);
 }
 
 void InterfaceGraphique::fermer_rendu() {
@@ -96,6 +68,30 @@ Element InterfaceGraphique::Render() const {
   });
 }
 
+Component InterfaceGraphique::construire_racine() {
+  auto composant_commande = _module_commande ? _module_commande->MakeComponent(*this) : Renderer([this] {
+    return _module_commande ? _module_commande->Render() : filler();
+  });
+
+  auto composant_automatisation = _module_automatisation ? _module_automatisation->MakeComponent(*this) : Renderer([this] {
+    return _module_automatisation ? _module_automatisation->Render() : filler();
+  });
+
+  auto composant_discussion = _module_discussion ? _module_discussion->MakeComponent(*this) : Renderer([this] {
+    return _module_discussion ? _module_discussion->Render() : filler();
+  });
+
+  auto racine = Container::Vertical({
+      composant_commande,
+      composant_automatisation,
+      composant_discussion,
+  });
+
+  return Renderer(racine, [this] {
+    return Render();
+  });
+}
+
 Element InterfaceGraphique::RenderAvecEnTete(
     const std::string& titre,
     const std::string& sous_titre,
@@ -132,34 +128,6 @@ Element InterfaceGraphique::RenderAvecEnTete(
   return vbox(std::move(lignes)) | border;
 }
 
-void InterfaceGraphique::afficher_page(
-    const std::string& titre,
-    const std::string& sous_titre,
-    const std::vector<std::string>& description_lignes,
-    const Element& corps,
-    std::function<bool(Event)> gestionnaire_evenement
-) {
-  auto page = Renderer([&] {
-    return RenderAvecEnTete(titre, sous_titre, description_lignes, corps);
-  });
-
-  std::ofstream lg_page("/tmp/bonhomme-debug.log", std::ios::app);
-  lg_page << "[InterfaceGraphique] afficher_page -> afficher_composant\n";
-  lg_page.close();
-
-  afficher_composant(page, gestionnaire_evenement);
-}
-
-void InterfaceGraphique::definir_entete(
-    const std::string& titre,
-    const std::string& sous_titre,
-    const std::vector<std::string>& description_lignes
-) {
-  _entete_titre = titre;
-  _entete_sous_titre = sous_titre;
-  _entete_description = description_lignes;
-}
-
 void InterfaceGraphique::afficher_composant(
     Component composant,
     std::function<bool(Event)> gestionnaire_evenement
@@ -174,23 +142,4 @@ void InterfaceGraphique::afficher_composant(
   }
 
   _screen.Loop(cible);
-}
-
-void InterfaceGraphique::afficher_rendu(std::function<bool(Event)> gestionnaire_evenement) {
-
-  // Fallback to element-based render to ensure content is visible.
-  auto rendu = Renderer([&] {
-    bool aucun_visible = true;
-    if (_module_automatisation && _module_automatisation->estVisible()) aucun_visible = false;
-    if (_module_commande && _module_commande->estVisible()) aucun_visible = false;
-    if (_module_discussion && _module_discussion->estVisible()) aucun_visible = false;
-
-    if (aucun_visible) {
-      return text("Aucun module d'affiche: appelez la fonction afficher d'un module pour mettre estVisible a True");
-    }
-
-    return RenderAvecEnTete(_entete_titre, _entete_sous_titre, _entete_description, Render());
-  });
-
-  afficher_composant(rendu, gestionnaire_evenement);
 }

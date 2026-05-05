@@ -6,7 +6,6 @@
 #include "module_de_commande.hpp"
 #include "../interface_graphique.hpp"
 
-#include <chrono>
 #include <ctime>
 #include <thread>
 #include <fstream>
@@ -28,20 +27,6 @@ void ModuleDeCommande::definir_choix(const std::string& titre, const std::vector
     _titre_choix = titre;
     _choix_courants = choix;
     _selection_courante = selection;
-}
-
-/**
- * @brief Valide un choix courant (methode conservee pour compatibilite).
- * @param choix Libelle du choix qui a ete valide
- */
-void ModuleDeCommande::valider_choix(const std::string& choix) {
-    (void)choix;
-}
-
-/**
- * @brief Annule le choix courant (methode conservee pour compatibilite).
- */
-void ModuleDeCommande::annuler_choix() {
 }
 
 /**
@@ -204,19 +189,22 @@ void ModuleDeCommande::afficher_phase_end(const std::vector<std::string>& messag
         text("[ Appuyez sur ENTREE pour continuer ]") | bold | center,
     });
 
-    interface_graphique.afficher_page(
-        "Transition",
-        "",
-        description_lignes,
-        corps,
-        [&](Event event) -> bool {
-            if (event == Event::Return) {
-                interface_graphique.fermer_rendu();
-                return true;
-            }
-            return false;
+    auto page = Renderer([&] {
+        return interface_graphique.RenderAvecEnTete(
+            "Transition",
+            "",
+            description_lignes,
+            corps
+        );
+    });
+
+    interface_graphique.afficher_composant(page, [&](Event event) -> bool {
+        if (event == Event::Return) {
+            interface_graphique.fermer_rendu();
+            return true;
         }
-    );
+        return false;
+    });
 }
 
 /**
@@ -243,29 +231,32 @@ Element ModuleDeCommande::Render() const {
         }
     }
 
-    return encadrer_avec_titre("Commande", vbox(std::move(lignes)));
+    return encadrer_avec_titre("Commande", vbox(std::move(lignes))) | color(Color::GreenLight);
 }
 
-ftxui::Component ModuleDeCommande::MakeComponent() {
-    // If choices are present, expose a Menu component bound to internal state
-    if (!_choix_courants.empty()) {
-        auto menu = Menu(&_choix_courants, &_selection_courante);
-
-        return Renderer(menu, [&] {
-            Elements lignes;
-
-            if (_titre_choix.empty()) {
-                lignes.push_back(text("Choisissez une action") | bold);
-            } else {
-                lignes.push_back(text(_titre_choix) | bold);
-            }
-            lignes.push_back(separator());
-            lignes.push_back(menu->Render());
-
-            return encadrer_avec_titre("Commande", vbox(std::move(lignes)));
-        });
+ftxui::Component ModuleDeCommande::MakeComponent(InterfaceGraphique& interface_graphique) {
+    if (_choix_courants.empty()) {
+        return Renderer([this] { return Render(); });
     }
 
-    // Fallback: render as static element
-    return Renderer([&] { return Render(); });
+    MenuOption option;
+    option.on_enter = [&interface_graphique] {
+        interface_graphique.fermer_rendu();
+    };
+    auto menu = Menu(&_choix_courants, &_selection_courante, option);
+
+    return Renderer(menu, [&] {
+        Elements lignes;
+
+        if (!_titre_choix.empty()) {
+            lignes.push_back(text(_titre_choix) | bold);
+        } else {
+            lignes.push_back(text("Choisissez une action") | bold);
+        }
+
+        lignes.push_back(separator());
+        lignes.push_back(menu->Render());
+
+        return encadrer_avec_titre("Commande", vbox(std::move(lignes))) | color(Color::GreenLight);
+    });
 }

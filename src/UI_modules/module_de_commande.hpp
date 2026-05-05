@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma once
+
 #include <string>
 #include <vector>
 
@@ -30,17 +32,6 @@ public:
      * @param selection Index de selection initiale (-1 si aucune)
      */
     void definir_choix(const std::string& titre, const std::vector<std::string>& choix, int selection);
-
-    /**
-     * @brief Valide un choix courant (conserve pour compatibilite d'API).
-     * @param choix Libelle du choix valide
-     */
-    void valider_choix(const std::string& choix);
-
-    /**
-     * @brief Annule le choix courant sans le valider.
-     */
-    void annuler_choix();
 
     /**
      * @brief Efface le choix en cours d'affichage.
@@ -80,7 +71,7 @@ public:
     /**
      * @brief Construit le composant interactif du module (menu/selection).
      */
-    ftxui::Component MakeComponent() ;
+    ftxui::Component MakeComponent(InterfaceGraphique& interface_graphique) override;
 
 private:
     /// Titre du groupe de choix courant.

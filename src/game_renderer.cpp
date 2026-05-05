@@ -58,22 +58,12 @@ int show_choice_menu(
     }
 
     interface.get_module_commande()->definir_choix(titre_menu, labels, 0);
-
-    int selected = 0;
-    bool confirmed = false;
     bool quit = false;
 
-    // If a command module is present, display it via the central interface.
     auto module = interface.get_module_commande();
-    interface.definir_entete(titre_phase, "", description_lignes);
+    auto composant = interface.construire_racine();
 
-    interface.afficher_rendu([&](Event event) -> bool {
-        if (event == Event::Return) {
-            confirmed = true;
-            interface.fermer_rendu();
-            return true;
-        }
-
+    interface.afficher_composant(composant, [&](Event event) -> bool {
         if (event == Event::Character('q') || event == Event::Escape) {
             quit = true;
             interface.fermer_rendu();
@@ -84,17 +74,13 @@ int show_choice_menu(
     });
 
     // Read selection from module after the composed render loop exits
-    selected = module->get_selection_courante();
-    
+    int selected = module->get_selection_courante();
 
-    if (quit || !confirmed) {
-        interface.get_module_commande()->annuler_choix();
+    if (quit) {
         interface.get_module_commande()->effacer_choix();
         return -1;
     }
 
-    interface.get_module_commande()->definir_choix(titre_menu, labels, selected);
-    interface.get_module_commande()->valider_choix(labels[selected]);
     interface.get_module_commande()->effacer_choix();
 
     return selected;
@@ -128,7 +114,11 @@ static void afficher_info(
         text("[ Entree ] Continuer") | dim | center,
     });
 
-    interface.afficher_page(titre, sous_titre, description_lignes, corps, [&](Event event) -> bool {
+    auto page = Renderer([&] {
+        return interface.RenderAvecEnTete(titre, sous_titre, description_lignes, corps);
+    });
+
+    interface.afficher_composant(page, [&](Event event) -> bool {
         if (event == Event::Return || event == Event::Escape) {
             interface.fermer_rendu();
             return true;
@@ -184,7 +174,7 @@ void run_game(const GameMeta& meta, InterfaceGraphique& interface) {
         if (!phase.description.empty()) {
             phase_desc.push_back(phase.description);
         }
-        afficher_info(interface, phase.label, "Phase", phase_desc);
+        //afficher_info(interface, phase.label, "Phase", phase_desc);
 
         for (const auto& task : phase.tasks) {
             Autom autom = load_autom(task.autom_ref, meta);
@@ -211,9 +201,10 @@ void run_game(const GameMeta& meta, InterfaceGraphique& interface) {
 
                 if (option.outcome != "no_autom") {
                     state.unlocked_automs.push_back(task.autom_ref);
-                    afficher_info(interface, "Automatisation", "Debloquee", {"Autom debloquee : " + autom.label});
+                    module_automatisation->preparer_menu_depuis_unlocked(state.unlocked_automs, meta);
+                    //afficher_info(interface, "Automatisation", "Debloquee", {"Autom debloquee : " + autom.label});
                 } else {
-                    afficher_info(interface, "Automatisation", "Non debloquee", {"Autom non debloquee."});
+                    //afficher_info(interface, "Automatisation", "Non debloquee", {"Autom non debloquee."});
                 }
             }
         }

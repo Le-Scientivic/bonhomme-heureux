@@ -1,5 +1,7 @@
 #include "module_de_discussion.hpp"
 
+#include <algorithm>
+
 using namespace ftxui;
 
 ModuleDeDiscussion::ModuleDeDiscussion() = default;
@@ -16,7 +18,8 @@ void ModuleDeDiscussion::réinitialiser_discussion() {
     _messages.clear();
 }
 
-Element ModuleDeDiscussion::RenderMessages() const {
+Element ModuleDeDiscussion::Render() const {
+    // Construire l'affichage statique (utilisé par le layout global)
     std::vector<Element> lignes;
     lignes.reserve(_messages.size());
 
@@ -37,31 +40,40 @@ Element ModuleDeDiscussion::RenderMessages() const {
         lignes.push_back(paragraph("Aucun message pour le moment"));
     }
 
-    return vbox(std::move(lignes));
-}
-
-Element ModuleDeDiscussion::Render() const {
-    auto corps = vbox({
-        RenderMessages(),
-        separator(),
-        text(_slider_label + ": " + std::to_string(_slider_value)) | dim,
-    });
-
-    return encadrer_avec_titre("Discussion", std::move(corps));
+    // Limiter la hauteur pour forcer l'utilisation du scroll
+    return encadrer_avec_titre("Discussion", vbox(std::move(lignes)) | vscroll_indicator | frame | size(HEIGHT, LESS_THAN, 12)) | color(Color::BlueLight);
 }
 
 Component ModuleDeDiscussion::MakeComponent(InterfaceGraphique& interface_graphique) {
     (void)interface_graphique;
 
-    auto slider = Slider(&_slider_label, &_slider_value, _slider_min, _slider_max, 1);
+    // --- Création du renderer principal ---
+    auto renderer = Renderer([this] {
+        // --- Création des éléments enfants pour chaque message ---
+        std::vector<Element> lignes;
+        lignes.reserve(_messages.size());
 
-    return Renderer(slider, [&] {
-        auto corps = vbox({
-            RenderMessages(),
-            separator(),
-            slider->Render(),
-        });
+        for (const auto& message : _messages) {
+            auto contenu = vbox({
+                text(message.nom) | bold,
+                paragraph(message.texte),
+            }) | border | size(WIDTH, LESS_THAN, 60);
 
-        return encadrer_avec_titre("Discussion", std::move(corps));
+            if (message.est_a_moi) {
+                lignes.push_back(hbox({filler(), contenu}));
+            } else {
+                lignes.push_back(hbox({contenu, filler()}));
+            }
+        }
+
+        if (lignes.empty()) {
+            lignes.push_back(paragraph("Aucun message pour le moment"));
+        }
+
+        // --- Affichage avec vscroll_indicator + frame et hauteur limitée ---
+        return encadrer_avec_titre("Discussion",
+            vbox(std::move(lignes)) | vscroll_indicator | frame | size(HEIGHT, LESS_THAN, 12)) | color(Color::BlueLight);
     });
+
+    return renderer;
 }

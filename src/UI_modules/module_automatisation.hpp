@@ -75,9 +75,16 @@ public:
 	 */
 	ftxui::Element Render() const override;
 
+	/**
+	 * @brief Construit le composant interactif du module (menu de navigation).
+	 */
+	ftxui::Component MakeComponent(InterfaceGraphique& interface_graphique) override;
+
 private:
 	/// Automations actuellement visibles dans le menu.
 	std::vector<GameChoice> _automs_courantes;
+	/// Libelles synchronises avec la liste d'automations pour le menu FTXUI.
+	std::vector<std::string> _labels_courants;
 	/// Index de la selection courante, ou -1 si vide.
 	int _selection_courante = -1;
 };
