@@ -19,6 +19,7 @@ void ModuleDeDiscussion::ajoute_son_message(const std::string& son_nom, const st
 
 void ModuleDeDiscussion::réinitialiser_discussion() {
     _messages.clear();
+    _scroll_offset = 0;
 }
 
 Element ModuleDeDiscussion::Render() const {
@@ -53,7 +54,7 @@ Element ModuleDeDiscussion::Render() const {
         | focusPositionRelative(0.5f, scroll_ratio)
         | vscroll_indicator
         | frame
-        | size(HEIGHT, LESS_THAN, 12)
+        | yflex
     ) | color(Color::BlueLight);
 }
 

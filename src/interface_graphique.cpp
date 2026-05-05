@@ -42,16 +42,16 @@ Element InterfaceGraphique::Render() const {
 
   auto render_left_slot = [](const std::shared_ptr<Module>& module) -> Element {
     if (!module || !module->estVisible()) {
-      return filler() | flex;
+      return filler();
     }
-    return module->Render() | flex;
+    return module->Render() | size(WIDTH, LESS_THAN, 32) | yflex;
   };
 
   auto render_right_slot = [](const std::shared_ptr<Module>& module) -> Element {
     if (!module || !module->estVisible()) {
       return filler() | flex;
     }
-    return hbox({filler(), module->Render() | flex}) | flex;
+    return module->Render() | flex;
   };
 
   auto top_row = hbox({
@@ -62,8 +62,7 @@ Element InterfaceGraphique::Render() const {
   auto bottom_row = render_slot(_module_commande);
 
   return vbox({
-    top_row,
-    filler(),
+    top_row | yflex,
     bottom_row,
   });
 }
@@ -81,20 +80,19 @@ Component InterfaceGraphique::construire_racine() {
 
   return Renderer(racine, [this, composant_commande, composant_automatisation, composant_discussion] {
     auto left = [&]() -> Element {
-        if (!_module_automatisation || !_module_automatisation->estVisible()) return filler() | flex;
-        return composant_automatisation->Render() | flex;
+        if (!_module_automatisation || !_module_automatisation->estVisible()) return filler();
+        return composant_automatisation->Render() | size(WIDTH, LESS_THAN, 32) | yflex;
     };
     auto right = [&]() -> Element {
         if (!_module_discussion || !_module_discussion->estVisible()) return filler() | flex;
-        return hbox({filler(), composant_discussion->Render() | flex}) | flex;
+        return composant_discussion->Render() | flex;
     };
     auto bottom = [&]() -> Element {
         if (!_module_commande || !_module_commande->estVisible()) return filler();
         return composant_commande->Render();
     };
     return vbox({
-        hbox({left(), right()}),
-        filler(),
+        hbox({left(), right()}) | yflex,
         bottom(),
     });
   });

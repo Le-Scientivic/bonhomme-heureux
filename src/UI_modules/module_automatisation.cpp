@@ -96,7 +96,9 @@ Element ModuleDeAutomatisation::_render_frame(Element corps) const {
         separator(),
         std::move(corps),
         separator(),
-        text("[ haut/bas ] Naviguer   [ Entree ] Activer   [ q/Echap ] Annuler") | dim,
+        text("[ haut/bas ] Naviguer") | dim,
+        text("[ Entree ] Activer") | dim,
+        text("[ q/Echap ] Annuler") | dim,
     })) | color(Color::RGB(255, 180, 0));
 }
 
