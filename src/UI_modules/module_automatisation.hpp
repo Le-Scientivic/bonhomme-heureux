@@ -81,6 +81,8 @@ public:
 	ftxui::Component MakeComponent(InterfaceGraphique& interface_graphique) override;
 
 private:
+	ftxui::Element _render_frame(ftxui::Element corps) const;
+
 	/// Automations actuellement visibles dans le menu.
 	std::vector<GameChoice> _automs_courantes;
 	/// Libelles synchronises avec la liste d'automations pour le menu FTXUI.

@@ -35,27 +35,6 @@ int show_choice_menu(
 );
 
 /**
- * Affiche la zone de saisie pour que le joueur tape un message
- * @param prompt texte à afficher avant la zone de saisie
- * @return message tapé par le joueur
- */
-std::string show_input(const std::string& prompt);
-
-/**
- * Affiche un message de l'histoire (typewriter effect)
- * @param message texte à afficher
- * @param speaker nom de la personne qui parle
- */
-void show_message(const std::string& speaker, const std::string& message, InterfaceGraphique& interface);
-
-/**
- * Affiche un message avec effet typewriter dans un composant FTXUI
- * @param message texte à afficher
- * @return Element FTXUI
- */
-Element render_message_with_effect(const std::string& message);
-
-/**
  * Affiche la fin de la phase avec message de transition
  * @param messages vecteur de messages de transition
  */

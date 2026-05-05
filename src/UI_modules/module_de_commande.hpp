@@ -59,11 +59,6 @@ public:
     bool afficher_intro(const GameMeta& meta, InterfaceGraphique& interface_graphique);
 
     /**
-     * @brief Affiche un ecran de fin de phase contenant un message aleatoire.
-     */
-    void afficher_phase_end(const std::vector<std::string>& messages, InterfaceGraphique& interface_graphique);
-
-    /**
      * @brief Produit le rendu FTXUI du module.
      */
     ftxui::Element Render() const override;
@@ -74,6 +69,8 @@ public:
     ftxui::Component MakeComponent(InterfaceGraphique& interface_graphique) override;
 
 private:
+    ftxui::Element _render_frame(ftxui::Element corps) const;
+
     /// Titre du groupe de choix courant.
     std::string _titre_choix;
     /// Choix affiches au joueur.

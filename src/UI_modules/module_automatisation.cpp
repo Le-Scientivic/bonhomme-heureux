@@ -90,36 +90,37 @@ std::vector<std::string> ModuleDeAutomatisation::labels_courants() const {
     return _labels_courants;
 }
 
-Element ModuleDeAutomatisation::Render() const {
-    Elements lignes;
+Element ModuleDeAutomatisation::_render_frame(Element corps) const {
+    return encadrer_avec_titre("Automatisation", vbox({
+        text("Automatisations activées") | bold,
+        separator(),
+        std::move(corps),
+        separator(),
+        text("[ haut/bas ] Naviguer   [ Entree ] Activer   [ q/Echap ] Annuler") | dim,
+    })) | color(Color::RGB(255, 180, 0));
+}
 
+Element ModuleDeAutomatisation::Render() const {
     if (_automs_courantes.empty()) {
-        lignes.push_back(text("Aucune automation debloquee.") | color(Color::RedLight));
-        lignes.push_back(separator());
-        lignes.push_back(text("Impossible de traiter cet evenement sans automation active.") | dim);
-        lignes.push_back(text("[ Entree ] Continuer") | dim);
-        return encadrer_avec_titre("Automatisation", vbox(std::move(lignes))) | color(Color::RGB(255, 180, 0));
+        return encadrer_avec_titre("Automatisation", vbox({
+            text("Aucune automation debloquee.") | color(Color::RedLight),
+            separator(),
+            text("Impossible de traiter cet evenement sans automation active.") | dim,
+            text("[ Entree ] Continuer") | dim,
+        })) | color(Color::RGB(255, 180, 0));
     }
 
-    lignes.push_back(text("Automatisations activées") | bold);
-    lignes.push_back(separator());
-
+    Elements items;
     for (int i = 0; i < (int)_automs_courantes.size(); ++i) {
         const bool selectionne = i == _selection_courante;
         const std::string prefixe = selectionne ? "> " : "  ";
         Element ligne = text(prefixe + _automs_courantes[i].label);
-
         if (selectionne) {
             ligne = ligne | color(Color::Cyan) | bold;
         }
-
-        lignes.push_back(std::move(ligne));
+        items.push_back(std::move(ligne));
     }
-
-    lignes.push_back(separator());
-    lignes.push_back(text("[ haut/bas ] Naviguer   [ Entree ] Activer   [ q/Echap ] Annuler") | dim);
-
-    return encadrer_avec_titre("Automatisation", vbox(std::move(lignes))) | color(Color::RGB(255, 180, 0));
+    return _render_frame(vbox(std::move(items)));
 }
 
 Component ModuleDeAutomatisation::MakeComponent(InterfaceGraphique& interface_graphique) {
@@ -130,16 +131,7 @@ Component ModuleDeAutomatisation::MakeComponent(InterfaceGraphique& interface_gr
     }
 
     auto menu = Menu(&_labels_courants, &_selection_courante);
-
-    return Renderer(menu, [&] {
-        Elements lignes;
-
-        lignes.push_back(text("Automatisations activées") | bold);
-        lignes.push_back(separator());
-        lignes.push_back(menu->Render());
-        lignes.push_back(separator());
-        lignes.push_back(text("[ haut/bas ] Naviguer   [ Entree ] Activer   [ q/Echap ] Annuler") | dim);
-
-        return encadrer_avec_titre("Automatisation", vbox(std::move(lignes))) | color(Color::RGB(255, 180, 0));
+    return Renderer(menu, [this, menu] {
+        return _render_frame(menu->Render());
     });
 }

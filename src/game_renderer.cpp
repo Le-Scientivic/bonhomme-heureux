@@ -41,29 +41,28 @@ void show_boot_sequence(const GamePhase& phase, GameState& state, InterfaceGraph
     }
 }
 
-int show_choice_menu(
-    const std::vector<GameChoice>& choices,
-    InterfaceGraphique& interface,
-    const std::string& titre_phase,
-    const std::vector<std::string>& description_lignes,
-    const std::string& titre_menu
-) {
+int show_choice_menu(const std::vector<GameChoice>& choices, InterfaceGraphique& interface, const std::string& titre_phase, const std::vector<std::string>& description_lignes, const std::string& titre_menu) {
+    // regarde qu'il y ai bien des choix à faire
     if (choices.empty()) {
         return -1;
     }
 
+    // Met les choix dans des labels.
     std::vector<std::string> labels;
     for (const auto& c : choices) {
         labels.push_back(c.label);
     }
 
-    interface.get_module_commande()->definir_choix(titre_menu, labels, 0);
+    auto module_de_commande = interface.get_module_commande();
+    // sauvegarde les valeurs du menu dans module_commande
+    module_de_commande->definir_choix(titre_menu, labels, 0);
     bool quit = false;
 
-    auto module = interface.get_module_commande();
-    auto composant = interface.construire_racine();
+    // fait le rendu de toute l'interface
+    auto composant_racine = interface.construire_racine();
 
-    interface.afficher_composant(composant, [&](Event event) -> bool {
+    // affiche l'interface et fait tourner l'événement
+    interface.afficher_composant(composant_racine, [&](Event event) -> bool {
         if (event == Event::Character('q') || event == Event::Escape) {
             quit = true;
             interface.fermer_rendu();
@@ -74,7 +73,7 @@ int show_choice_menu(
     });
 
     // Read selection from module after the composed render loop exits
-    int selected = module->get_selection_courante();
+    int selected = module_de_commande->get_selection_courante();
 
     if (quit) {
         interface.get_module_commande()->effacer_choix();
@@ -87,29 +86,14 @@ int show_choice_menu(
 }
 
 
-void show_message(const std::string& speaker, const std::string& message, InterfaceGraphique& interface) {
-    if (interface.get_module_discussion()) {
-        interface.get_module_discussion()->ajoute_son_message(speaker, message);
-    }
-}
-
-Element render_message_with_effect(const std::string& message) {
-    return paragraph("  " + message);
-}
-
-void show_phase_end(const std::vector<std::string>& messages, InterfaceGraphique& interface) {
-    if (interface.get_module_commande()) {
-        interface.get_module_commande()->afficher_phase_end(messages, interface);
-    }
-}
 
 static void afficher_info(
     InterfaceGraphique& interface,
     const std::string& titre,
     const std::string& sous_titre,
-    const std::vector<std::string>& description_lignes
+    const std::vector<std::string>& description_lignes,
+    bool accepter_escape = true
 ) {
-
     auto corps = vbox({
         text("[ Entree ] Continuer") | dim | center,
     });
@@ -119,12 +103,17 @@ static void afficher_info(
     });
 
     interface.afficher_composant(page, [&](Event event) -> bool {
-        if (event == Event::Return || event == Event::Escape) {
+        if (event == Event::Return || (accepter_escape && event == Event::Escape)) {
             interface.fermer_rendu();
             return true;
         }
         return false;
     });
+}
+
+void show_phase_end(const std::vector<std::string>& messages, InterfaceGraphique& interface) {
+    if (messages.empty()) return;
+    afficher_info(interface, "Transition", "", {pick_text(messages)}, false);
 }
 
 void run_game(const GameMeta& meta, InterfaceGraphique& interface) {
@@ -133,6 +122,7 @@ void run_game(const GameMeta& meta, InterfaceGraphique& interface) {
     std::shared_ptr<ModuleDeCommande> module_commande = interface.get_module_commande();
     std::shared_ptr<ModuleDeDiscussion> module_discussion = interface.get_module_discussion();
     std::shared_ptr<ModuleDeAutomatisation> module_automatisation = interface.get_module_automatisation();
+    //std::function<bool(Event)> gestionnaire_evenement;
 
     module_discussion->cacher();
     module_discussion->réinitialiser_discussion();
@@ -210,7 +200,7 @@ void run_game(const GameMeta& meta, InterfaceGraphique& interface) {
         }
 
         if (phase.has_phase_end) {
-            module_commande->afficher_phase_end(phase.phase_end.transition_messages, interface);
+            show_phase_end(phase.phase_end.transition_messages, interface);
         }
     }
 

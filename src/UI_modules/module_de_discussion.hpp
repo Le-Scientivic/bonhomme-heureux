@@ -64,4 +64,6 @@ private:
 
     /// Historique ordonne des messages de discussion.
     std::vector<Message> _messages;
+    /// Decalage de scroll depuis le bas (0 = bas, N = haut).
+    int _scroll_offset = 0;
 };

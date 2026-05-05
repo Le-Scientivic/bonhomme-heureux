@@ -9,7 +9,7 @@
 
 int main() {
 
-    run_examples_menu();
+    //run_examples_menu();
 
     auto module_automatisation = std::make_shared<ModuleDeAutomatisation>();
     auto module_commande = std::make_shared<ModuleDeCommande>();

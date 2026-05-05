@@ -69,17 +69,9 @@ Element InterfaceGraphique::Render() const {
 }
 
 Component InterfaceGraphique::construire_racine() {
-  auto composant_commande = _module_commande ? _module_commande->MakeComponent(*this) : Renderer([this] {
-    return _module_commande ? _module_commande->Render() : filler();
-  });
-
-  auto composant_automatisation = _module_automatisation ? _module_automatisation->MakeComponent(*this) : Renderer([this] {
-    return _module_automatisation ? _module_automatisation->Render() : filler();
-  });
-
-  auto composant_discussion = _module_discussion ? _module_discussion->MakeComponent(*this) : Renderer([this] {
-    return _module_discussion ? _module_discussion->Render() : filler();
-  });
+  auto composant_commande = _module_commande ? _module_commande->MakeComponent(*this) : Renderer([] { return filler(); });
+  auto composant_automatisation = _module_automatisation ? _module_automatisation->MakeComponent(*this) : Renderer([] { return filler(); });
+  auto composant_discussion = _module_discussion ? _module_discussion->MakeComponent(*this) : Renderer([] { return filler(); });
 
   auto racine = Container::Vertical({
       composant_commande,
@@ -87,8 +79,24 @@ Component InterfaceGraphique::construire_racine() {
       composant_discussion,
   });
 
-  return Renderer(racine, [this] {
-    return Render();
+  return Renderer(racine, [this, composant_commande, composant_automatisation, composant_discussion] {
+    auto left = [&]() -> Element {
+        if (!_module_automatisation || !_module_automatisation->estVisible()) return filler() | flex;
+        return composant_automatisation->Render() | flex;
+    };
+    auto right = [&]() -> Element {
+        if (!_module_discussion || !_module_discussion->estVisible()) return filler() | flex;
+        return hbox({filler(), composant_discussion->Render() | flex}) | flex;
+    };
+    auto bottom = [&]() -> Element {
+        if (!_module_commande || !_module_commande->estVisible()) return filler();
+        return composant_commande->Render();
+    };
+    return vbox({
+        hbox({left(), right()}),
+        filler(),
+        bottom(),
+    });
   });
 }
 

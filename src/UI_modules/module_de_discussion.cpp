@@ -1,4 +1,5 @@
 #include "module_de_discussion.hpp"
+#include "../interface_graphique.hpp"
 
 #include <algorithm>
 
@@ -8,10 +9,12 @@ ModuleDeDiscussion::ModuleDeDiscussion() = default;
 
 void ModuleDeDiscussion::ajoute_mon_message(const std::string& mon_nom, const std::string& mon_message) {
     _messages.push_back(Message{mon_nom, mon_message, true});
+    _scroll_offset = 0;
 }
 
 void ModuleDeDiscussion::ajoute_son_message(const std::string& son_nom, const std::string& son_message) {
     _messages.push_back(Message{son_nom, son_message, false});
+    _scroll_offset = 0;
 }
 
 void ModuleDeDiscussion::réinitialiser_discussion() {
@@ -27,7 +30,7 @@ Element ModuleDeDiscussion::Render() const {
         auto contenu = vbox({
             text(message.nom) | bold,
             paragraph(message.texte),
-        }) | border | size(WIDTH, LESS_THAN, 60);
+        }) | border | size(WIDTH, LESS_THAN, 40);
 
         if (message.est_a_moi) {
             lignes.push_back(hbox({filler(), contenu}));
@@ -40,40 +43,34 @@ Element ModuleDeDiscussion::Render() const {
         lignes.push_back(paragraph("Aucun message pour le moment"));
     }
 
-    // Limiter la hauteur pour forcer l'utilisation du scroll
-    return encadrer_avec_titre("Discussion", vbox(std::move(lignes)) | vscroll_indicator | frame | size(HEIGHT, LESS_THAN, 12)) | color(Color::BlueLight);
+    float scroll_ratio = 1.0f;
+    if (_scroll_offset > 0 && _messages.size() > 1) {
+        scroll_ratio = 1.0f - (float)_scroll_offset / (float)(_messages.size() - 1);
+    }
+
+    return encadrer_avec_titre("Discussion",
+        vbox(std::move(lignes))
+        | focusPositionRelative(0.5f, scroll_ratio)
+        | vscroll_indicator
+        | frame
+        | size(HEIGHT, LESS_THAN, 12)
+    ) | color(Color::BlueLight);
 }
 
 Component ModuleDeDiscussion::MakeComponent(InterfaceGraphique& interface_graphique) {
     (void)interface_graphique;
-
-    // --- Création du renderer principal ---
-    auto renderer = Renderer([this] {
-        // --- Création des éléments enfants pour chaque message ---
-        std::vector<Element> lignes;
-        lignes.reserve(_messages.size());
-
-        for (const auto& message : _messages) {
-            auto contenu = vbox({
-                text(message.nom) | bold,
-                paragraph(message.texte),
-            }) | border | size(WIDTH, LESS_THAN, 60);
-
-            if (message.est_a_moi) {
-                lignes.push_back(hbox({filler(), contenu}));
-            } else {
-                lignes.push_back(hbox({contenu, filler()}));
-            }
+    auto renderer = Renderer([this] { return Render(); });
+    return CatchEvent(renderer, [this](Event event) -> bool {
+        if (!event.is_mouse()) return false;
+        if (event.mouse().button == Mouse::WheelUp) {
+            int max_offset = std::max(0, (int)_messages.size() - 1);
+            _scroll_offset = std::min(_scroll_offset + 1, max_offset);
+            return true;
         }
-
-        if (lignes.empty()) {
-            lignes.push_back(paragraph("Aucun message pour le moment"));
+        if (event.mouse().button == Mouse::WheelDown) {
+            _scroll_offset = std::max(0, _scroll_offset - 1);
+            return true;
         }
-
-        // --- Affichage avec vscroll_indicator + frame et hauteur limitée ---
-        return encadrer_avec_titre("Discussion",
-            vbox(std::move(lignes)) | vscroll_indicator | frame | size(HEIGHT, LESS_THAN, 12)) | color(Color::BlueLight);
+        return false;
     });
-
-    return renderer;
 }

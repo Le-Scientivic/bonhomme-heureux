@@ -200,8 +200,6 @@ struct GameState {
     std::vector<std::string> unlocked_automs;
     /// Indique si la partie a deja demarre.
     bool game_started = false;
-    /// Index courant du message affiche dans certains ecrans.
-    int current_message_index = 0;
 };
 
 /// Charge les metadonnees globales du jeu depuis le JSON principal.
