@@ -116,49 +116,12 @@ void show_phase_end(const std::vector<std::string>& messages, InterfaceGraphique
     afficher_info(interface, "Transition", "", {pick_text(messages)}, false);
 }
 
-void run_game(const GameMeta& meta, InterfaceGraphique& interface) {
-    GameState state = init_game_state();
-
-    std::shared_ptr<ModuleDeCommande> module_commande = interface.get_module_commande();
+void run_phase(std::string phase_tag /*= "P1"*/, GameMeta meta, InterfaceGraphique& interface, GameState& state) {
     std::shared_ptr<ModuleDeDiscussion> module_discussion = interface.get_module_discussion();
     std::shared_ptr<ModuleDeAutomatisation> module_automatisation = interface.get_module_automatisation();
-    //std::function<bool(Event)> gestionnaire_evenement;
 
-    module_discussion->cacher();
-    module_discussion->réinitialiser_discussion();
-    module_automatisation->cacher();
-
-    if (!show_intro(meta, interface)) {
-        return;
-    }
-
-    // P0
-    GamePhase phase0 = load_phase("P0", meta);
-
-    show_boot_sequence(phase0, state, interface);
-
-    module_discussion->afficher();
-    module_automatisation->afficher();
-
-    if (phase0.has_player_choice) {
-        std::vector<std::string> desc;
-        if (!phase0.description.empty()) {
-            desc.push_back(phase0.description);
-        }
-        int choice_idx = show_choice_menu(phase0.player_choice_on_start.options, interface, phase0.label, desc, "Faites votre choix");
-
-        if (choice_idx >= 0) {
-            const auto& choice = phase0.player_choice_on_start.options[choice_idx];
-            std::string response = choice.label;
-            if (!choice.response_variants.empty()) {
-                response = pick_text(choice.response_variants);
-            }
-            module_discussion->ajoute_mon_message(meta.player_name, response);
-        }
-    }
-
-    // P1 et P3 : tâches + automs
-    for (const std::string& phase_id : {"P1", "P3"}) {
+    // P : tâches + automs
+    for (const std::string& phase_id : {phase_tag}) {
         GamePhase phase = load_phase(phase_id, meta);
         std::vector<std::string> phase_desc;
         if (!phase.description.empty()) {
@@ -203,6 +166,51 @@ void run_game(const GameMeta& meta, InterfaceGraphique& interface) {
             show_phase_end(phase.phase_end.transition_messages, interface);
         }
     }
+}
+
+void run_game(const GameMeta& meta, InterfaceGraphique& interface) {
+    GameState state = init_game_state();
+
+    std::shared_ptr<ModuleDeCommande> module_commande = interface.get_module_commande();
+    std::shared_ptr<ModuleDeDiscussion> module_discussion = interface.get_module_discussion();
+    std::shared_ptr<ModuleDeAutomatisation> module_automatisation = interface.get_module_automatisation();
+    //std::function<bool(Event)> gestionnaire_evenement;
+
+    module_discussion->cacher();
+    module_discussion->réinitialiser_discussion();
+    module_automatisation->cacher();
+
+    if (!show_intro(meta, interface)) {
+        return;
+    }
+
+    // P0
+    GamePhase phase0 = load_phase("P0", meta);
+
+    show_boot_sequence(phase0, state, interface);
+
+    module_discussion->afficher();
+    module_automatisation->afficher();
+
+    if (phase0.has_player_choice) {
+        std::vector<std::string> desc;
+        if (!phase0.description.empty()) {
+            desc.push_back(phase0.description);
+        }
+        int choice_idx = show_choice_menu(phase0.player_choice_on_start.options, interface, phase0.label, desc, "Faites votre choix");
+
+        if (choice_idx >= 0) {
+            const auto& choice = phase0.player_choice_on_start.options[choice_idx];
+            std::string response = choice.label;
+            if (!choice.response_variants.empty()) {
+                response = pick_text(choice.response_variants);
+            }
+            module_discussion->ajoute_mon_message(meta.player_name, response);
+        }
+    }
+
+    // P1 : tâches + automs
+    run_phase("P1", meta, interface, state);
 
     // P2 : événements temps réel
     GamePhase phase2 = load_phase("P2", meta);
@@ -245,6 +253,9 @@ void run_game(const GameMeta& meta, InterfaceGraphique& interface) {
     if (phase2.has_phase_end) {
         show_phase_end(phase2.phase_end.transition_messages, interface);
     }
+
+    // P3 : tâches + automs
+    run_phase("P3", meta, interface, state);
 
     // P4 : cambriolage
     GamePhase phase4 = load_phase("P4", meta);
